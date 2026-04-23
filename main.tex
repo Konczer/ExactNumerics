@@ -1,0 +1,1948 @@
+\documentclass{article}
+
+% https://www.cl.cam.ac.uk/local/typography/phd/#margin
+\usepackage[a4paper, left=30mm, right=20mm, top=20mm, bottom=20mm]{geometry}
+
+% Required for inserting images
+\usepackage{graphicx}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T2A,T3,T1]{fontenc}
+
+\usepackage[backref=true]{biblatex}
+\usepackage{biblatex}
+\addbibresource{ref.bib}
+
+
+
+% https://latex.org/forum/viewtopic.php?t=20320
+\DeclareSymbolFont{tipa}{T3}{cmr}{m}{n}
+\DeclareMathAccent{\invbreve}{\mathalpha}{tipa}{16} 
+
+% To avoid "Too many math alphabets used in version normal."
+% https://tex.stackexchange.com/questions/3676/too-many-math-alphabets-error
+% https://tug.org/pipermail/yandytex/2003-September/000368.html
+\newcommand\hmmax{0}
+\newcommand\bmmax{0}
+
+\usepackage{amsmath, amsfonts, amssymb, bm}
+
+\usepackage{bbm} % For indicator function as \mathbbm{1}
+
+
+
+\usepackage{yfonts}
+\usepackage{mathrsfs}
+\usepackage{pifont}
+\usepackage{ifsym}
+\usepackage{bbm}
+
+\DeclareMathAlphabet\mathbfcal{OMS}{cmsy}{b}{n}
+\usepackage{MnSymbol}
+\usepackage{xcolor}
+\usepackage[colorlinks=true]{hyperref}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{tabularx}
+\usepackage{epigraph} 
+\usepackage{algorithm}
+\usepackage{todonotes}
+%\usepackage{algpseudocode}
+
+
+
+\definecolor{darkblue}{rgb}{0.0, 0.0, 0.55}
+\definecolor{forestgreen}{rgb}{0.13, 0.55, 0.13}
+\definecolor{darkteal}{rgb}{0.0, 0.24, 0.18}
+
+\hypersetup{
+  linkcolor=darkblue,
+  urlcolor=darkteal,
+  citecolor=forestgreen
+}
+
+\definecolor{w}{RGB}{231, 160, 76}
+\definecolor{l}{RGB}{37, 84, 138}
+
+\newcommand{\wbox}{\textcolor{w}{\blacksquare}}
+\newcommand{\lbox}{\textcolor{l}{\blacksquare}}
+
+\newcommand{\wb}{\square}
+\newcommand{\bb}{\blacksquare}
+
+
+%For diagrams
+\usepackage{tikz-cd}
+\usetikzlibrary{decorations.pathreplacing,fit,shapes.geometric}
+
+% To solve the potential \Cross error in bbding
+\usepackage{savesym} 
+
+
+
+\usepackage{environ}
+
+\usepackage{amsthm}
+\usepackage{etoolbox} % Required for \AtBeginEnvironment and \AtEndEnvironment
+
+\theoremstyle{definition}
+
+\newtheorem{definition}{Definition}[section]
+\AtBeginEnvironment{definition}{%
+  \pushQED{\qed}\renewcommand{\qedsymbol}{$\diamondsuit$}%
+}
+\AtEndEnvironment{definition}{\popQED}
+
+\newtheorem{theorem}{Theorem}[section]
+\AtBeginEnvironment{theorem}{%
+  \pushQED{\qed}\renewcommand{\qedsymbol}{$\spadesuit$}%
+}
+\AtEndEnvironment{theorem}{\popQED}
+
+\newtheorem{lemma}{Lemma}[section]
+\AtBeginEnvironment{lemma}{%
+  \pushQED{\qed}\renewcommand{\qedsymbol}{\rotatebox[origin=c]{180}{$\spadesuit$}}%
+}
+\AtEndEnvironment{lemma}{\popQED}
+
+\newtheorem{conjecture}{Conjecture}[section]
+\AtBeginEnvironment{conjecture}{%
+  \pushQED{\qed}\renewcommand{\qedsymbol}{$\clubsuit$}%
+}
+\AtEndEnvironment{conjecture}{\popQED}
+
+% Define the 'remark' environment with specific ending
+\newtheorem*{remark}{Remark}
+\AtBeginEnvironment{remark}{%
+  \pushQED{\qed}\renewcommand{\qedsymbol}{$\triangle$}%
+}
+\AtEndEnvironment{remark}{\popQED}
+
+% Define the 'example' environment with specific ending
+\newtheorem*{example}{Example}
+\AtBeginEnvironment{example}{%
+  \pushQED{\qed}\renewcommand{\qedsymbol}{$\blacktriangle$}%
+}
+\AtEndEnvironment{example}{\popQED}
+
+
+\AtEndEnvironment{lemma}{\popQED}
+
+\renewcommand\qedsymbol{\textbf{Q.E.D.} \  $\heartsuit$}
+
+
+
+% Supp
+\DeclareMathOperator\supp{supp}
+
+% Rotated Clubsuit
+\usepackage{rotating}
+
+\newcommand{\rotatedclubsuit}{\mathbin{\text{\begin{sideways}\begin{sideways}$\clubsuit$\end{sideways}\end{sideways}}}}
+
+
+
+% Multiple bibliography:
+% https://tex.stackexchange.com/questions/98660/two-bibliographies-one-for-main-text-and-one-for-appendix
+% https://www.overleaf.com/learn/latex/Questions/Creating_multiple_bibliographies_in_the_same_document
+
+% ** *** ***** ******* ***********
+
+\title{Methods for exact numerics \\
+%Equilibrium predictive inference for Uniform distribution \\
+        \large A collection of controlled approximations}
+\author{József Konczer\footnote{\href{mailto:konczer.j@gmail.com}{konczer.j@gmail.com},
+        \href{https://konczer.github.io/}{konczer.github.io}} \ and Rithwik Ranganathan\footnote{*}
+        }
+\date{February 2026}
+
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+    
+\end{abstract}
+
+\section{Introduction}
+
+\begin{quote}
+{\bf Hieron} But are strict proofs in applied mathematics really necessary? After all, as you said, the mathematical model is only an approximation of reality. If you use approximately correct formulae, your results will be still approximately close to reality and they can never be absolutely correct anyway.
+
+{\bf Archimedes} You are mistaken, my king. Just because the mathematical model is only an approximation and there is always a certain discrepancy with the facts, one has to take care not to increase this discrepancy further by a careless use of mathematics. One has to be as accurate as possible. By the way, in regard to approximations, there is a common misunderstanding that using approximations means departing from mathematical precision. Approximations have a precise theory, and results about approximations—for instance, inequalities—have to be proved as rigorously as identities. Perhaps you remember the approximations which I gave for the area of a circle with given diameter; I proved them with a rigor usual in geometry.
+
+  \begin{flushright}
+    {---Alfréd Rényi, Dialogues On Mathematics \cite{book:RenyiDialogs,book:RenyiDialogusok}}
+  \end{flushright}
+\end{quote}
+
+Methods for \href{https://en.wikipedia.org/wiki/Numerical_certification}{Numerical certification}, focusing on ``posteriori'' certification, where guarantees are not derived using an approximation method, but determined using a proposed approximation and some global properties of the problem in question.
+
+\subsection{A few simple examples}
+
+\begin{equation}
+    f(x) = x + \tanh(x) = 1
+\end{equation}
+
+Lets imagine that we got a hint that the root is close to $x^\bullet=0.5$. Is there a way to say something exact about the accuracy of the guess without calculating the root?
+The answer is affirmative, because we can deduce a global property of the $f(.)$ function. It is easy to see, that it derivative is in the range $f'(x) \in (1,2]$. Therefore we can do the following exact statement:
+
+\begin{equation}
+    f(x^*)-f(x^\bullet) = f'(\xi) \cdot (x^*-x^\bullet)
+    , \quad \xi \in [x^\bullet, x^*] \subseteq \mathbb{R}
+\end{equation}
+
+\begin{equation}
+    |f(x^*)-f(x^\bullet)| = |f'(\xi)| \cdot |x^*-x^\bullet| 
+    \ge
+    \inf_{\xi \in \mathbb{R}} |f'(\xi)| \cdot |x^*-x^\bullet| 
+\end{equation}
+
+\begin{equation}
+    |x^*-x^\bullet| \le \frac{|f(x^*)-f(x^\bullet)|}{\inf_{\xi \in \mathbb{R}} |f'(\xi)|}
+    = | 1 - f(x^\bullet) | = | 1 - (0.5 + \tanh(0.5))| \le 0.037883 
+\end{equation}
+
+Therefore with this educated (or lucky) guess we can exactly state that:
+
+\begin{equation}
+    x^* \in [0.462117, 0.537883], \quad \text{or} \quad 
+    x^* = 0.5 \pm 0.037883 
+\end{equation}
+
+\subsubsection{Newtons method with exact bounds}
+
+Let say we have a $f \in C^2(\mathbb{R},\mathbb{R})$ (in fact it is enough to be twice differentiable (without the requirement of continuity\footnote{Or perhaps more generally that $f'(.)$ is a (locally) Lipschitz function.}), and boundedness of the second derivative on an open domain.)
+And we search for a root of this function $x^* \in \mathbb{R}, \ f(x^*)= 0$.
+
+If we can independently prove that on some open domain $\mathcal{D}$ the absolute value of the second derivative is bounded:
+
+\begin{equation}
+    \exists M \in \mathbb{R}, \ \forall x \in \mathcal{D} \ |f''(x)|\le M
+\end{equation}
+
+Then -- if we are close enough to a root -- an exact interval can be determined:
+
+Let say that we are at $x^\circ$, where the value is $f(x^\circ) \ne 0$ and we know the derivative $f'(x^\circ)$.
+
+\begin{equation}
+    f(x) = f(x^\circ) + f'(x^\circ) (x-x^\circ) + \frac{1}{2} f''(\xi) (x-x^\circ)^2, \quad \xi \in \{t\ x+ (1-t) \ x^\circ \ | \ t \in [0,1]]
+\end{equation}
+
+By assuming that $f(x)=0$ i.e. $x=x^*$ we have:
+
+\begin{equation}
+    |f(x^\circ) + f'(x^\circ) (x-x^\circ)| = \frac{1}{2} |f''(\xi)| (x-x^\circ)^2
+\end{equation}
+
+Excluded solution set
+
+\begin{equation}
+    \mathcal{E} = \{ x \in \mathbb{R} \ | \ |f(x^\circ) + f'(x^\circ) (x-x^\circ)| > \frac{1}{2} M (x-x^\circ)^2 \ \}
+\end{equation}
+
+The solution set can be defined as follows:
+
+\begin{equation}
+    \mathcal{S} : \text{Connected component of } \mathcal{E}^{\complement} = \mathbb{R} \setminus\mathcal{E} \ \text{including } x^{\bullet} = x^\circ - f(x^\circ)/f'(x^\circ)
+\end{equation}
+
+
+If
+
+\begin{equation}
+    \mathcal{S} \subseteq \mathcal{D} \implies x^* \in \mathcal{S}
+\end{equation}
+
+In the one dimensional case we can provide explicit lower and upper bounds from this observation simply by solving a second order inequality: ...
+
+\paragraph{A note on determining the upper bound:}
+In general determining a valid upper bound of the second derivative of a function on a domain $\mathcal{D}$ can be challenging. However there are a few simple techniques by which this can be done if the function $f(.)$ is constructed from simpler components.
+If we define a symbolic algebra: $\mathcal{A}=<\mathbb{R},\cdot,\oplus,\mathsf{a}_1,\mathsf{a}_2,\dots>$, where atomic $\mathsf{a}_i$ corresponds to ``elementary functions'':
+
+\begin{equation}
+    \text{Eval}[\mathsf{a}_i](x) 
+    =
+    \phi_i(x)
+\end{equation}
+
+And for composite algebra elements $\mathsf{A} \in \mathcal{A}$ we define the evaluation as:
+
+\begin{equation}
+    \text{Eval}[c \cdot \mathsf{A}](x) 
+    =
+    c \cdot \text{Eval}[\mathsf{A}](x)
+\end{equation}
+
+\begin{equation}
+    \text{Eval}[\mathsf{A}_1 \oplus \mathsf{A}_2](x)
+    =
+    \text{Eval}[\mathsf{A}_1](x) 
+    +
+    \text{Eval}[\mathsf{A}_2](x) 
+\end{equation}
+
+We can introduce an upper bound mapping for the second derivative from the algebra to the non-negative real numbers $\overline{\text{Max}}_2 : \mathcal{A} \mapsto \mathbb{R}_\ge$
+
+\begin{equation}
+    \overline{\text{Max}}_2[c \cdot \mathsf{A}] 
+    =
+    |c| \cdot \overline{\text{Max}}_2[\mathsf{A}] 
+\end{equation}
+
+\begin{equation}
+    \overline{\text{Max}}_2[\mathsf{A}_1 \oplus \mathsf{A}_2]
+    =
+    \overline{\text{Max}}_2[\mathsf{A}_1] + \overline{\text{Max}}_2[\mathsf{A}_2]
+\end{equation}
+
+To enrich the algebra by multiplication $\mathcal{A}=<\mathbb{R},\cdot,\oplus,\otimes,\mathsf{a}_1,\mathsf{a}_2,\dots>$ we need to introduce the evaluation for the symbolic product:
+
+\begin{equation}
+    \text{Eval}[\mathsf{A}_1 \otimes \mathsf{A}_2](x)
+    =
+    \text{Eval}[\mathsf{A}_1](x) 
+    \cdot
+    \text{Eval}[\mathsf{A}_2](x) 
+\end{equation}
+
+and a similar concept to $\overline{\text{Max}}_2$ for the $n$-th derivative, $n\in\{0,1,2\}$.
+
+\begin{equation}
+    \overline{\text{Max}}_0[\mathsf{A}_1 \otimes \mathsf{A}_2] 
+    =
+    \overline{\text{Max}}_0[\mathsf{A}_1] \cdot \overline{\text{Max}}_0[\mathsf{A}_2]
+\end{equation}
+
+\begin{equation}
+    \overline{\text{Max}}_1[\mathsf{A}_1 \otimes \mathsf{A}_2] 
+    =
+    \overline{\text{Max}}_1[\mathsf{A}_1] \cdot \overline{\text{Max}}_0[\mathsf{A}_2]
+    +
+    \overline{\text{Max}}_0[\mathsf{A}_1] \cdot \overline{\text{Max}}_1[\mathsf{A}_2]
+\end{equation}
+
+\begin{equation}
+    \overline{\text{Max}}_2[\mathsf{A}_1 \otimes \mathsf{A}_2] 
+    =
+    \overline{\text{Max}}_2[\mathsf{A}_1] \cdot \overline{\text{Max}}_0[\mathsf{A}_2]
+    +
+    2 \cdot \overline{\text{Max}}_1[\mathsf{A}_1] \cdot \overline{\text{Max}}_1[\mathsf{A}_2]
+    +
+    \overline{\text{Max}}_0[\mathsf{A}_1] \cdot \overline{\text{Max}}_2[\mathsf{A}_2]
+\end{equation}
+
+Therefore if we have an algebra of function symbols $\mathcal{A}=<\mathbb{R},\cdot,\oplus,\otimes,\mathsf{a}_1,\mathsf{a}_2,\dots>$, where for all ``elementary'' $\mathsf{a}_i$ -- that corresponds to ``elementary functions'' $\phi_i(x) = \text{Eval}[\mathsf{a}_i](x)$ -- the $\overline{\text{Max}}_n[\mathsf{a}_i] \ge \sup_{x\in\mathcal{D}} \phi^{(n)}_i(x)$ are set, then for any composite function in the algebra the 
+$\overline{\text{Max}}_2[.]$ value can be determined.
+
+Generalization for any $n \in \mathbb{N}$:
+
+\begin{equation}
+    \overline{\text{Max}}_n[c \cdot \mathsf{A}] 
+    =
+    |c| \cdot \overline{\text{Max}}_n[\mathsf{A}] 
+\end{equation}
+
+\begin{equation}
+    \overline{\text{Max}}_n[\mathsf{A}_1 \oplus \mathsf{A}_2]
+    =
+    \overline{\text{Max}}_n[\mathsf{A}_1] + \overline{\text{Max}}_n[\mathsf{A}_2]
+\end{equation}
+
+\begin{equation}
+    \overline{\text{Max}}_n[\mathsf{A}_1 \otimes \mathsf{A}_2] 
+    =
+    \sum_{k=0}^n
+    \binom{n}{k}
+    \overline{\text{Max}}_k[\mathsf{A}_1] \cdot \overline{\text{Max}}_{n-k}[\mathsf{A}_2]
+\end{equation}
+
+\paragraph{Example:}
+Let $\mathcal{D}=(-1,1)$
+
+\begin{equation}
+    f(x)=\exp(x)-\arctan(x)
+\end{equation}
+
+Therefore one possible symbolic representation is:
+
+\begin{equation}
+    \mathsf{A} = \mathsf{exp} \oplus ((-1) \cdot \mathsf{arctan})
+    , \quad \text{Eval}[\mathsf{A}](x) = f(x)
+\end{equation}
+
+$\overline{\text{Max}}_2[\mathsf{exp}] = e$ and $\overline{\text{Max}}_2[\mathsf{arctan}] = 3/8 \sqrt{3}$, therefore:
+
+\begin{equation}
+    \overline{\text{Max}}_2[\mathsf{A}] = e +  3/8 \sqrt{3}
+    \ge \sup_{x \in \mathcal{D}} |f''(x)|
+\end{equation}
+
+\subsubsection{Multi variate case}
+
+The concept of exact solution sets are much more interesting in the multivariate case. (Because in one dimension for continuous problems it is often enough to find two points with opposite signs to guarantee a set containing a root.)
+
+\href{https://en.wikipedia.org/wiki/Kantorovich_theorem}{Kantorovich theorem}
+
+\section{Moderately powerful techniques}
+
+We will demonstrate the simpler techniques on the quantum pendulum:
+
+\begin{equation}
+    H = -\frac{1}{2} \frac{\partial^2}{\partial\varphi^2} + g (1-\cos(\varphi))
+\end{equation}
+
+\subsection{Gershgorin circle}
+
+(Geršgorin's circle)
+
+\subsection{Brauer's ovals of Cassini}
+
+\section{Quartic oscillator as a testing ground}
+
+\begin{equation}
+    H = \frac{1}{2} P^2+\frac{1}{2} \omega_0^2 \ X^2+\lambda \frac{1}{4!} X^4
+\end{equation}
+
+\begin{equation}
+    H = \frac{1}{2} P^2+\frac{1}{2} \omega_0^2 \  X^2+g X^4
+\end{equation}
+
+\section{Controlled approximation}
+
+\subsection{Majorization, minorization, envelope method}
+
+Lemma:
+
+\begin{equation}
+    \forall x \in X, \ f(x) \ge g(x) 
+    \implies
+    \inf_{x \in X} f(x) \ge \inf_{x \in X} g(x)
+\end{equation}
+
+\begin{equation}
+    \forall x \in X, \ f(x) \ge g(x) 
+    \implies
+    \sup_{x \in X} f(x) \ge \sup_{x \in X} g(x)
+\end{equation}
+
+Proof for inf:
+
+\begin{equation}
+    \forall x \in X, \ 
+    f(x) \ge g(x) 
+    \ge 
+    \inf_{x \in X} g(x)
+\end{equation}
+
+Therefore $\inf_{x \in X} g(x)$ is a global lower bound for $f(.)$, so $\inf_{x\in X} f(x) \ge \inf_{x \in X} g(x)$
+
+Lemma:
+
+\begin{equation}
+    \forall x \in X', \ f(x) \ge g(x), \ 
+    X' \subseteq X
+    \implies
+    \inf_{x \in X'} f(x) \ge \inf_{x \in X} g(x)
+\end{equation}
+
+Proof for inf:
+
+\begin{equation}
+    \forall x \in X', \ 
+    f(x) \ge g(x) 
+    \ge 
+    \inf_{x \in X'} g(x)
+    \ge
+    \inf_{x \in X} g(x)
+\end{equation}
+
+Therefore $\inf_{x \in X} g(x)$ is a global lower bound for $f(.)$, on $X'$, so $\inf_{x\in X'} f(x) \ge \inf_{x \in X} g(x)$.
+
+
+For two self-adjoint linear operators $A$, $B$ on the finite $n$-dimensional vector complex vectorspace $V$ we have:
+
+\begin{equation}
+    A \succcurlyeq B
+    \implies
+    \lambda_i \ge \mu_i
+\end{equation}
+
+Proof:
+
+\begin{equation}
+    A \succcurlyeq B
+    \iff
+    \forall v \in V, \ v^* \cdot A \cdot v \ge v^* \cdot B \cdot v
+\end{equation}
+
+\begin{equation}
+    \mu_1
+    =
+    \min_{v \in V, ||v||=1}
+    v^* \cdot B \cdot v
+    \le
+    \min_{v \in V, ||v||=1}
+    v^* \cdot A \cdot v
+    =
+    \lambda_1
+\end{equation}
+
+\begin{equation}
+    \lambda_n
+    =
+    \max_{v \in V, ||v||=1}
+    v^* \cdot A \cdot v
+    \ge
+    \max_{v \in V, ||v||=1}
+    v^* \cdot B \cdot v
+    =
+    \mu_n
+\end{equation}
+
+\begin{equation}
+    \lambda_k
+    =
+    \min_{V_k \subseteq V, \text{Dim}(V_k)=k} \max_{v\in V_k, ||v||=1} 
+    v^* \cdot A \cdot v
+\end{equation}
+
+\begin{equation}
+    \forall \  V_k\subseteq V  \max_{v\in V_k, ||v||=1} 
+    v^* \cdot A \cdot v
+    \ge
+    \max_{v\in V_k, ||v||=1} 
+    v^* \cdot B \cdot v
+\end{equation}
+
+Therefore 
+
+\begin{equation}
+        \lambda_k
+    =
+    \min_{V_k \subseteq V, \text{Dim}(V_k)=k} \max_{v\in V_k, ||v||=1} 
+    v^* \cdot A \cdot v
+    \ge
+    \min_{V_k \subseteq V, \text{Dim}(V_k)=k} \max_{v\in V_k, ||v||=1} 
+    v^* \cdot B \cdot v
+    =
+    \mu_k
+\end{equation}
+
+In case of linear operators on infinte dimensional separable Hilbert-spaces $\mathcal{H}$ if $A$ and $B$ are densly defined self-adjoint operators and both $A$ and $B$ have a point spectrum (at least for a finite low lying eigenvalues) -- technically both operators having a countable set of eigenvalues and eigenvectors below their ``essential spectrum'' --  and their spectrum is bounded from below, then
+
+\begin{equation}
+    A \succcurlyeq B
+    \implies
+    \lambda_k \ge \mu_k
+\end{equation}
+
+Proof:
+
+\begin{equation}
+    A \succcurlyeq B
+    \iff
+    \forall \psi \in \mathcal{Q}(A) \cap \mathcal{Q}(B), \ 
+    \langle \psi | A | \psi \rangle
+    \ge
+    \langle \psi | B | \psi \rangle
+\end{equation}
+
+Where $\mathcal{Q}(A) \subseteq \mathcal{H}$ stands for the linear space, where the quadratic form is defined, i.e. $\langle \psi | A | \psi \rangle \in \mathbb{R}$.
+
+In fact in this case -- when both $A$ and $B$ are bounded from below and $A \succcurlyeq B$ -- $\mathcal{Q}(A) \subseteq \mathcal{Q}(B)$ because for a state $\psi \in \mathcal{Q}(A)$ the quadretic form $\langle \psi | A | \psi \rangle$ is defined, then $\langle \psi | B | \psi \rangle$ has to be finite and defined as well. This implies that $\mathcal{Q}(A) \cap \mathcal{Q}(B) = \mathcal{Q}(A)$ that is a dense subspace of $\mathcal{H}$.
+
+Utiliying the Min-max theorem (in \href{https://www.mat.univie.ac.at/~gerald/ftp/book-schroe/schroe.pdf}{Theorem 4.10})
+
+\begin{equation}
+    \lambda_k
+    =
+    \inf_{\mathcal{H}_k \subseteq \mathcal{H}, \text{Dim}(\mathcal{H}_k)=k} \sup_{\psi\in \mathcal{H}_k, ||\psi||=1} 
+    \langle \psi |  A | \psi \rangle
+\end{equation}
+
+\begin{equation}
+    \forall \  \mathcal{H}_k\subseteq \mathcal{Q}(A)
+    \sup_{\psi\in \mathcal{H}_k, ||\psi||=1} 
+    \langle \psi |  A | \psi \rangle
+    \ge
+    \sup_{\psi\in \mathcal{H}_k, ||\psi||=1} 
+    \langle \psi |  B | \psi \rangle
+    \end{equation}
+
+Therefore:
+
+\begin{equation}
+    \lambda_k
+    =
+    \inf_{\mathcal{H}_k \subseteq \mathcal{Q}(A), \text{Dim}(\mathcal{H}_k)=k} \sup_{\psi\in \mathcal{H}_k, ||\psi||=1} 
+    \langle \psi |  A | \psi \rangle
+    \ge
+    \inf_{\mathcal{H}_k \subseteq \mathcal{Q}(B), \text{Dim}(\mathcal{H}_k)=k} \sup_{\psi\in \mathcal{H}_k, ||\psi||=1} 
+    \langle \psi |  B | \psi \rangle
+    =
+    \mu_k
+\end{equation}
+
+In particular we will show that how envelope theory \cite{arxiv:EnvelopeTheory} can be narrated as a minorzation - majorization technique.
+
+\subsubsection{Quadratic potential}
+
+\begin{equation}
+    H = \frac{1}{2} P^2+X^4
+\end{equation}
+
+\begin{equation}
+    \check{H}(a) =  \frac{1}{2} P^2+a^4+2 a^2(X-a)(X+a)
+\end{equation}
+
+\begin{equation}
+    \check{H}(a) =  \frac{1}{2} P^2+\frac{1}{2} 4 a^2 X^2 - 2 a^4
+\end{equation}
+
+\begin{equation}
+    \check{E}_n(a) = 2 a (n + 1/2) - 2 a^4 
+\end{equation}
+
+\begin{equation}
+    \check{E}^*_n = \sup_{a>0} \ \check{E}_n(a)
+\end{equation}
+
+\begin{equation}
+    \check{E}^*_n = \frac{3}{8} (1 + 2 n)^{4/3}, \quad
+    a^*_n=\frac{1}{2} (1 + 2 n)^{1/3}
+\end{equation}
+
+\begin{equation}
+    E_n \ge \check{E}^*_n = \frac{3}{8} (1 + 2 n)^{4/3}
+\end{equation}
+
+\subsubsection{Rectangular potential wells}
+
+One of the simplest quantummechanical system is a particle in a ptential well, with infinite wall.
+
+\begin{equation}
+    V(x;V_0,a) =
+    \begin{cases}
+        V_0 & \text{if } -a < x < a \\
+        \infty & \text{otherwise}
+    \end{cases}
+\end{equation}
+
+This definition is ofcourse far from being precise -- and this operator is not densly defined on squqre integrable functions on the whole numberline $L^2(\mathbb{R},\mathbb{C})$ --, but it can be defined as a limiting case of densly defined operators.
+
+\begin{equation}
+    V(x;V_0,a;\Lambda) =
+    \begin{cases}
+        V_0 & \text{if } -a < x < a \\
+        \Lambda \  V_{\text{ext}}(x) & \text{otherwise}
+    \end{cases}
+\end{equation}
+
+Where $V_\text{ext}(.)$ is a positive continuous function with positive global lower bound $\inf_{x \in \mathbb{R}} V_\text{ext}(x) > 0$. If we wish to keep for instance the Schwartz functions on the whole number line to belong to the domain of $V(x;V_0,a;\Lambda)$ for any finite $\Lambda>0$, then we can demand that $V_\text{ext}(x)$ has at most polynomial growth as $|x|$ goes to infinity.
+Quantities related to $V(x;V_0,a)$ can then be understood as the $\Lambda \to \infty$ limiting cases of expressions including the regularized $V(x;V_0,a;\Lambda)$ potential.
+
+\begin{equation}
+    \psi_n(x)=\frac{1}{\sqrt{a}}\sin(k_n (x+a)), \quad
+    E_n = \frac{1}{2} k_n^2 + V_0
+\end{equation}
+
+\begin{equation}
+    k_n=\pi \frac{n+1}{2 a}
+\end{equation}
+
+\subsubsection{Pöschl–Teller potential}
+
+\subsection{Krylov-Weinstein bound}
+
+For a self adjoint $A$ 
+
+\begin{equation}
+    \exists v \in V \setminus \{\underline{0}\} , \varepsilon \ge 0 ,  \ v^* \cdot (A-\alpha)^2 \cdot v \le \varepsilon \ v^* \cdot v
+    \implies
+    \exists \lambda_i, \ |\lambda_i-\alpha| \le \sqrt{\varepsilon}
+\end{equation}
+
+Proof
+
+\begin{equation}
+    \forall v \in V, \  v^* \cdot (A-\alpha)^2 \cdot v  \ge \min_{i} (\lambda_i-\alpha)^2 \ v^* \cdot v
+\end{equation}
+
+\begin{equation}
+    \exists v \in V \setminus \{\underline{0}\} , \varepsilon \ge 0 ,  \ v^* \cdot (A-\alpha)^2 \cdot v \le \varepsilon \ v^* \cdot v
+    \implies
+    \varepsilon \ge  \min_{i} (\lambda_i-\alpha)^2
+\end{equation}
+
+\begin{equation}
+    \min_{i} (\lambda_i-\alpha)^2 \le \varepsilon
+    \implies
+    \exists \lambda_i, \ |\lambda_i-\alpha| \le \sqrt{\varepsilon}
+\end{equation}
+
+Excluding eigenvalues:
+
+\begin{equation}
+    \exists \varepsilon \ge 0 , \ 
+    (A-\alpha)^2 \succcurlyeq \varepsilon
+    \implies
+    \nexists \ \lambda_i, \ \lambda_i \in [\alpha-\sqrt{\varepsilon},\alpha+\sqrt{\varepsilon}]
+\end{equation}
+
+Proof
+
+Lets assume that for some $\varepsilon>0$ there is an eigenvalue $\lambda_i \in [\alpha-\sqrt{\varepsilon},\alpha+\sqrt{\varepsilon}]$. Then there is an eigenvector $v_i \in V \setminus \{\underline{0}\}$ such that $A\cdot v_i=\lambda_i v_i$.
+Then $(A-\alpha)^2\cdot v_i = (\lambda_i-\alpha)^2 v_i$ and
+
+\begin{equation}
+    \frac{v^*_i \cdot (A-\alpha)^2 \cdot v_i}{v^*_i \cdot v_i} = (\lambda_i-\alpha)^2 \le \epsilon
+\end{equation}
+
+Bur from
+
+\begin{equation}
+    (A-\alpha)^2 \succcurlyeq \varepsilon
+    \implies
+    \forall v \in V \setminus \{\underline{0}\} , \ 
+    \frac{v^*_i \cdot (A-\alpha)^2 \cdot v_i}{v^*_i \cdot v_i} 
+    \ge 
+    \varepsilon
+\end{equation}
+
+Which is a contradiction.
+
+
+\begin{equation}
+    H = \frac{1}{2} P^2 + V(X)
+\end{equation}
+
+\begin{equation}
+    (H-E)^2 = \frac{1}{4} P^4 + \frac{1}{2}(P^2 \ (V(X)-E)+ (V(X)-E) \ P^2) + (V(X)-E)^2
+\end{equation}
+
+\begin{equation}
+    [V(X),P] = i V'(X)
+\end{equation}
+
+\begin{equation}
+    (H-E)^2 = \frac{1}{4} P^4 + P \ (V(X)-E) \  P + [[V(X)-E,P],P] + (V(X)-E)^2
+\end{equation}
+
+\begin{equation}
+    (H-E)^2 = \frac{1}{4} P^4 + P \ (V(X)-E) \  P - V''(X) + (V(X)-E)^2
+\end{equation}
+
+Minorization:
+
+We can introduce a peacewise constant, minorizing potential $\check{V}(x;E)$, $\forall x \in \mathbb{R}, \ \check{V}(x;E) \le V(x)-E$ and a minorization square-like potential $\check{W}(X;E)$ 
+$\forall x \in \mathbb{R}, \ \check{W}(x;E) \le  (V(x)-E)^2 - V''(x)$
+
+\begin{equation}
+    \left ( \frac{1}{4} P^2 + P \ \check{V} \ P + \check{W} \right ) \psi(x) = \varepsilon \  \psi(x)
+\end{equation}
+
+With the ansatz $\psi(x) = e^{ik \ x} $
+
+\begin{equation}
+    \frac{1}{4}k^4 - \check{V} k^2 + \check{W} = \varepsilon
+\end{equation}
+
+This has four soultions:
+
+\begin{equation}
+    k_{s_1,s_2} = s_1\sqrt{2} \sqrt{s_2 \sqrt{\check{V}^2 - \check{W} + \varepsilon} + \check{V}}
+\end{equation}
+
+\begin{equation}
+    \psi(x) = A_{++} e^{ik_{++} x} + A_{+-} e^{ik_{+-} x} + A_{-+} e^{ik_{-+} x} + A_{--} e^{ik_{--} x}
+\end{equation}
+
+With $A_{++}, A_{+-}, A_{-+}, A_{--} \in \mathbb{C}$
+
+\begin{equation}
+    (H-E)^2 = \frac{1}{4} P^4 + (V(X)-E) \  P^2 - [V(X)-E,P] P - V''(X) + (V(X)-E)^2
+\end{equation}
+
+\begin{equation}
+    (H-E)^2 = \frac{1}{4} P^4 + (V(X)-E) \  P^2 - iV'(X) P - V''(X) + (V(X)-E)^2
+\end{equation}
+
+For piecwise constant V(x), going from $V_{-}$ for $x<0$ and $V_{+}$ for $x>0$
+
+\begin{equation}
+    (H-E)^2 \psi(x) = \frac{1}{4} \psi''''(x) + (V(x)-E) (-\psi''(x)) - i (V_{+}-V_{-}) \delta(x) (-i \psi'(x)) - V''(X) \psi(x) + (V(X)-E)^2 \psi(x)
+\end{equation}
+
+\begin{equation}
+    (H-E)^2 \psi(x) = 
+    \varepsilon \ \psi(x)
+\end{equation}
+
+\begin{equation}
+    \int_{-\Delta}^\Delta (H-E)^2 \psi(x) \ dx
+    =
+    \int_{-\Delta}^\Delta \varepsilon \ \psi(x) \ dx
+\end{equation}
+
+\begin{equation}
+    \lim_{\Delta \to 0^+}\int_{-\Delta}^\Delta \psi''''(x) \ dx
+    =
+    \psi'''_+ - \psi'''_-
+\end{equation}
+
+\begin{equation}
+    \lim_{\Delta \to 0^+}\int_{-\Delta}^\Delta (V(x)-E) (-\psi''(x)) \ dx
+    =
+    \lim_{\Delta \to 0^+}
+    [(V(x)-E)(-\psi'(x))]_{-\Delta}^\Delta
+    -
+    \int_{-\Delta}^\Delta V'(x) (-\psi'(x)) \ dx
+\end{equation}
+
+$0$ if $\psi'_+=\psi'_-$
+
+\begin{equation}
+    \lim_{\Delta \to 0^+}\int_{-\Delta}^\Delta (V_{+}-V_{-}) \delta(x)  \psi'(x) \ dx
+    =
+    (V_{+}-V_{-}) \psi'(0)
+\end{equation}
+
+As $\Delta \to 0^+$ we get:
+
+\begin{equation}
+    \frac{1}{4} (\psi'''_+ - \psi'''_-) 
+    + 
+    (V_{+}-V_{-}) \psi'(0)
+    =
+    0
+\end{equation}
+
+\begin{equation}
+    \psi_{-}=\psi_{+}=\psi(0), \quad
+    \psi'_{-}=\psi'_{+}=\psi'(0), \quad
+    \psi''_{-}=\psi''_{+}=\psi''(0), \quad
+\end{equation}
+
+\subsubsection{Auxiliary space methods}
+
+If we have a selfadjoint Hamiltonian operator $H$ on a Hilbert space $\mathcal{H}$, then we can try to find an $F$ operator on an extended Hilbert space $\mathcal{H} \otimes V$ that $F^2$ is ``close to'' $H \otimes I$.
+
+\begin{equation}
+    H=P^2+X^4
+\end{equation}
+
+\begin{equation}
+    F=P\otimes \sigma_x + W(X) \otimes \sigma_y
+\end{equation}
+
+\begin{equation}
+    F^2 = P^2 \otimes I + W(X)^2 \otimes I + P W(x) \otimes \sigma_x \sigma_y + W(X) P \otimes \sigma_y \sigma_x
+\end{equation}
+
+\begin{equation}
+    F^2 = P^2 \otimes I + W(X)^2 \otimes I - i [P, W(x)] \otimes \sigma_z
+\end{equation}
+
+\begin{equation}
+    F^2 = P^2 \otimes I + W(X)^2 \otimes I - W'(X) \otimes \sigma_z
+\end{equation}
+
+If we chose $W(X)=X^2$, then we get:
+
+\begin{equation}
+    F^2 = P^2 \otimes I +X^4 \otimes I - 2 X \otimes \sigma_z
+\end{equation}
+
+This is not exactly the quartic potential we had in the original $H$, but the $- 2 X \otimes \sigma_z$ is ``small'' relative to the $P^2 \otimes I +X^4 \otimes I$.
+
+This means that the $x^4 \pm 2x$ potential can be minorized and majorized by $g (x-x_0)^4+v_0$ potentials, therefore knowing the eigenvalues for the potential $x^4 \pm 2x$ can provide finite upper and lower bounds for the pure quartic potential.
+
+Using the Krylov-Weinstein bound for $F$:
+
+Lemma:
+If we have a self adjoint $A$
+
+\begin{equation}
+    v^* \cdot (A-\sqrt{E})^2 \cdot v \le \varepsilon \ v^* \cdot v
+\end{equation}
+
+then there is a $\lambda$ eigenvalue of $A^2$ that:
+
+\begin{equation}
+    \exists \lambda, |\lambda-E|\le \sqrt{\varepsilon} (2\sqrt{E}+\sqrt{\varepsilon})
+\end{equation}
+
+Proof
+
+\begin{equation}
+    v^* \cdot (A-\sqrt{E})^2 \cdot v = \varepsilon \ v^* \cdot v
+    \implies
+    \exists \mu, \ (\mu-\sqrt{E})^2 \le \varepsilon
+\end{equation}
+
+\begin{equation}
+    |\lambda - E| = |\mu-\sqrt{E}| \  | \mu + \sqrt{E}|
+\end{equation}
+
+\begin{equation}
+    | \mu + \sqrt{E}| = | \mu - \sqrt{E} + 2 \sqrt{E}| \le | \mu - \sqrt{E}| + 2 \sqrt{E}
+\end{equation}
+
+\begin{equation}
+    |\lambda - E| \le \sqrt{\varepsilon} (2 \sqrt{E} + \sqrt{\varepsilon})
+\end{equation}
+
+\begin{equation}
+    (F-\sqrt{E})^2 = F^2 + E - 2 \sqrt{E} \  F
+\end{equation}
+
+\begin{equation}
+    (F-\sqrt{E})^2 =
+    \begin{bmatrix}
+        P^2 + W(X)^2 - W'(X) + E & 2 \sqrt{E} (P+i W(X)) \\
+        2 \sqrt{E} (P-i W(X)) & P^2 + W(X)^2 + W'(X) + E
+    \end{bmatrix}
+\end{equation}
+
+And whenever we can find a pair of functions $\psi_\uparrow(x),\psi_\downarrow(x)$ that 
+
+\begin{equation}
+    [\psi_\uparrow^*(x),\psi_\downarrow^*(x)] 
+    \begin{bmatrix}
+        P^2 + W(X)^2 - W'(X) + E & 2 \sqrt{E} (P+i W(X)) \\
+        2 \sqrt{E} (P-i W(X)) & P^2 + W(X)^2 + W'(X) + E
+    \end{bmatrix}
+    \begin{bmatrix}
+        \psi_\uparrow(x) \\
+        \psi_\downarrow(x)
+    \end{bmatrix}
+    =
+    \varepsilon
+\end{equation}
+
+then we know that ...
+
+In the quartic case the $x \to -x$ is a symmetry, therefore we can look for the $(\psi_\uparrow(x),\psi_\downarrow(x))$ pairs as $(\psi(x)/\sqrt{2},\psi(-x)/\sqrt{2})$
+
+\subsection{Schur-complement method}
+
+Splitting the vector space into two component -- for example ``Low'' and ``High'' energy components.
+
+\begin{equation}
+    V=V_L \oplus V_H
+\end{equation}
+
+For a self adjoint operator $H$:
+
+\begin{equation}
+    H=
+    \begin{bmatrix}
+    H_{LL} & H_{LH} \\
+    H_{HL} & H_{HH}
+    \end{bmatrix}
+\end{equation}
+
+$H_{i,j} : V_j \mapsto V_i$
+
+Lemma:
+The lowest eigenvalues of $H_{LL}$ $\mu_i$ are greater or equal then the lowest eigenvalues of the complete $H$, $\lambda_i$.
+
+Proof
+With the min-max definition:
+
+\begin{equation}
+    \lambda_i = \inf_{v_1,\dots,v_i \in V \setminus \{ \underline{0} \}} \max_{k}  \frac{v^*_k\cdot H \cdot v_k}{v^*_k\cdot v_k}
+    \le
+    \inf_{v_1,\dots,v_i \in V_L \setminus \{ \underline{0} \}} \max_{k}  \frac{v^*_k\cdot H \cdot v_k}{v^*_k\cdot v_k}
+    =
+    \mu_i
+\end{equation}
+
+Because $(V_L \setminus \{ \underline{0} \}) \subseteq (V \setminus \{ \underline{0} \})$
+
+For an eigenvector $v=v_L \oplus v_H$
+
+\begin{equation}
+    H_{LL} \cdot v_L + H_{L H} \cdot v_H = \lambda v_L
+\end{equation}
+
+\begin{equation}
+    H_{HL} \cdot v_L + H_{H H} \cdot v_H = \lambda v_H
+\end{equation}
+
+If $(H_{HH}-\lambda)$ is invertible, then
+
+\begin{equation}
+    v_H= -(H_{HH}-\lambda)^{-1} H_{HL} \cdot v_L 
+\end{equation}
+
+And the eigenvalue equation in the lower sector become:
+
+\begin{equation}
+    H_\text{eff} (\lambda) \cdot v_L = \lambda v_L
+\end{equation}
+
+Substituting back to the set of equations in the low energy sector:
+
+\begin{equation}
+    H_{LL} \cdot v_L - H_{L H} (H_{HH}-\lambda)^{-1} H_{HL} \cdot v_L  = \lambda v_L
+\end{equation}
+
+We can introduce an effective matrix $H_\text{eff}(\lambda):V_L\mapsto V_L$
+
+\begin{equation}
+    H_\text{eff}(\lambda) 
+    =
+    H_{LL} - H_{L H} (H_{HH}-\lambda)^{-1} H_{HL}
+\end{equation}
+
+If we can determine a lower bound $m$ for $H_{HH}$ that is greater then a low lying eigenvalue, then 
+
+\begin{equation}
+    ||(H_{HH}-\lambda)^{-1}||\le (m-\lambda)^{-1}
+\end{equation}
+
+If $||-H_{L H} (H_{HH}-\lambda)^{-1} H_{HL}||$ could be made smaller and smaller by expanding $V_L$, then we could this dicreasing operator norm to obtain upper and lower bounds for the eigenvalues.
+However even if this operator norm is not dicreasing, upper and lower bounds can be obtained for low lying eigenvalues if the eigenvector components are not ``scattered too heavily to the high energy sector''.
+
+\begin{equation}
+    H_\text{eff}(B) = 
+    H_{LL} - H_{L H} \ B \  H_{HL}
+\end{equation}
+
+\begin{equation}
+    \Lambda = \{ (\lambda,v,B) \ | \ \lambda < m, B \succcurlyeq 0  , || B || \le (m-\lambda)^{-1}, ||v||=1, H_\text{eff}(B) \cdot v = \lambda v \}
+\end{equation}
+
+Let $\mu_i, w_i$ be the set of eigenvalues and eigenvectors of $H_{LL}$. Then let $\Lambda_i$ be the connected component of $\Lambda$ with $(\mu_i,w_i,0)$. (With possibly $\Lambda_i=\Lambda_j$ for some $i\ne j$.)
+
+We can introduce a simple projection operators: $\pi_\lambda (\lambda,v,B) = \lambda$, $\pi_{\lambda v} (\lambda,v,B) = (\lambda,v)$
+
+All $\pi_\lambda(\Lambda_i)$ contain at least one eigenvalue -- smaller then $m$ -- of the original $H$ matrix acting on $V=V_L \oplus V_H$.
+Further, all $\pi_{\lambda v}(\Lambda_i)$ contain all the eigenvalues and eigenvectors that belong to the same connected component.
+$\Lambda_i=\Lambda_j \implies (\lambda_j,v_j) \in \pi_{\lambda v}(\Lambda_i)$
+
+Lemma for eigenvalues $\lambda_i(H_\text{eff}(0))=\lambda_i(H_{LL}) < m$, we have: $\lambda_i(H) \in [\lambda_i(H_\text{eff}((m-\lambda_i(H))^{-1} I)),\lambda_i(H_\text{eff}(0))]$
+
+
+\subsection{Local energy methods}
+
+Local energy methods are most naturally defined in the coordinate representation.
+
+Lets take a standard time-independent Schrödinger equation:
+
+\begin{equation}
+    - \frac{1}{2} \Delta \psi(x) + V(x) \psi(x) = E \psi(x)
+\end{equation}
+
+For any trial wave function $\psi^\bullet$ and a trial energy $E^\bullet$ we can define a potential for which the $\psi^\bullet, E^\bullet$ guess is an exact solution:
+
+\begin{equation}
+    V^\bullet(x)= \frac{1}{2} \frac{\Delta \psi^\bullet}{\psi^\bullet} + E^\bullet
+\end{equation}
+
+And a compatible Hamilton operator looks the following:
+
+\begin{equation}
+    H^\bullet= - \frac{1}{2} \Delta + V^\bullet
+\end{equation}
+
+The certification idea is simple: if two self adjoint (or normal) operators differ only by a bounded operator:
+
+\begin{equation}
+    A_1-A_2 = B, \quad ||B|| \in \mathbb{R}
+\end{equation}
+
+then the spectrum of $A_1$ has to lie inside $A_2$'s spectrum extended by $||B||$ (and vica versa). Formally:
+
+\begin{equation}
+    \forall \lambda_2 \in \sigma(A_2), \exists \lambda_1 \in \sigma(A_1), \text{such that}
+    \ |\lambda_2-\lambda_1| \le ||B||
+\end{equation}
+
+Proof
+
+We will use the identity:
+
+\begin{equation}
+    A_1-\mu I
+    =
+    (A_2- \mu I)(I+(A_2-\mu I)^{-1}(A_1-A_2))
+\end{equation}
+
+\begin{equation}
+    (A_2- \mu I)(I+(A_2-\mu I)^{-1}(A_1-A_2))
+    =
+    (A_2-\mu I)+(A_1-A_2)
+    =
+     A_1-\mu I
+\end{equation}
+
+For self adjoint operators
+\begin{equation}
+    ||(A - \mu I)^{-1}|| = \sup_{\lambda \in \sigma(A)} |(\mu - \lambda)^{-1}|
+    =
+    \left ( \inf_{\lambda \in \sigma(A)} |\mu - \lambda| \right )^{-1}
+\end{equation}
+
+So in particular if $\mu=\lambda_1 \in \sigma(A_1)$, then 
+
+\begin{equation}
+    ||(A_2 - \lambda_1 I)^{-1}|| 
+    =
+    \left ( \inf_{\lambda_2 \in \sigma(A_2)} |\lambda_1 - \lambda_2| \right )^{-1}
+\end{equation}
+
+Now lets assume that $\inf_{\lambda_2 \in \sigma(A_2)} |\lambda_1 - \lambda_2|$ is greater then $||B||$:
+
+Then 
+
+\begin{equation}
+    ||(A_2 - \lambda_1 I)^{-1}||  < ||B||^{-1}
+\end{equation}
+
+From $||X Y|| \le ||X|| \cdot ||Y||$ we have:
+
+\begin{equation}
+    ||(A_2 - \lambda_1 I)^{-1} B||  < ||B||^{-1} ||B|| = 1
+\end{equation}
+
+So
+
+\begin{equation}
+    C=(A_2 - \lambda_1 I)^{-1} B, \quad ||C|| < 1
+\end{equation}
+
+Therefore for 
+
+\begin{equation}
+    A_1 - \lambda_1 I 
+    =
+    (A_2-\lambda_1 I)
+    (I+(A_2-\lambda_1 I)^{-1}B)
+    =
+    (A_2-\lambda_1 I) (I+C)
+\end{equation}
+
+and 
+
+\begin{equation}
+    \left ( A_1 - \lambda_1 I \right )^{-1}
+    =
+    (I+C)^{-1}
+    (A_2-\lambda_1 I)^{-1}
+\end{equation}
+
+If we assume that $\lambda_1 \notin \sigma(A_2)$ then $A_1 - \lambda_1 I$ is invertible whenever $I+C$ is invertible.
+If $||C||<1$ then $I+C$ is invertible (for instance with a convergent Neumann series).
+
+This would imply that $A_1 - \lambda_1 I $ is invertible, but this is a contradiction because $\lambda_1 \in\sigma(A_1)$.
+
+This completes the proof.
+
+So if we can find a $\psi^\bullet$ that induces a compatible potential $V^\bullet$ that is close to $V$ (in supremum norm), then this guarantees that there is a spectrum point close to $E^\bullet$. Formally:
+
+\begin{equation}
+    \exists E \in \sigma(H), |E-E^\bullet| \le ||V-V^\bullet||_\infty
+\end{equation}
+
+Local energy description
+
+\begin{equation}
+    h(x) = -\frac{1}{2} \frac{\Delta \psi^\bullet(x)}{\psi^\bullet(x)} + V(x)
+\end{equation}
+
+Essentially the same argument gives that there has to be a spactrum point between the infunum and the supremum of the local energy $h(x)$
+
+\begin{equation}
+    \exists E \in \sigma(H), \ 
+    \inf_{x} h(x) \le E \le \sup_{x} h(x)
+\end{equation}
+
+\subsection{Hoffman-Wielandt inequality}
+
+\subsection{Action based semiclassical matching}
+
+\subsection{Concavity properties}
+
+Lemma
+
+For any function $f: X \times X \mapsto \mathbb{R}$
+
+\begin{equation}
+    \inf_{x,y \in X} f(x,y) \le \inf_{x\in X} f(x,x)
+\end{equation}
+
+Let $A$ and $B$ two self adjoint matrices and $t \in[0,1]$ ($\bar{t}=1-t$)
+
+\begin{equation}
+    \lambda_1(t A + \bar{t} B) \ge t \ \lambda_1(A) + \bar{t} \ \lambda_1(B) 
+\end{equation}
+
+Proof
+
+\begin{equation}
+    \lambda_1(t A + \bar{t} B) = \min_{v \in V, ||v||=1} v^* \cdot (t A + \bar{t} B) \cdot v
+    =
+    \min_{v \in V, ||v||=1} (t \ v^* \cdot A \cdot v + \bar{t} \ v^* \cdot B \cdot v)
+\end{equation}
+
+\begin{equation}
+    \min_{v \in V, ||v||=1} (t \ v^* \cdot A \cdot v + \bar{t} \ v^* \cdot B \cdot v)
+    \ge
+    \min_{v \in V, ||v||=1} \min_{w \in V, ||w||=1} (t \ v^* \cdot A \cdot v + \bar{t} \ w^* \cdot B \cdot w)
+    =
+    \min_{v \in V, ||v||=1} t \ v^* \cdot A \cdot v
+    +
+    \min_{w \in V, ||w||=1} \bar{t} \ w^* \cdot B \cdot w
+\end{equation}
+
+\begin{equation}
+    \min_{v \in V, ||v||=1} t \ v^* \cdot A \cdot v
+    +
+    \min_{w \in V, ||w||=1} \bar{t} \ w^* \cdot B \cdot w
+    =
+    t \ \lambda_1(A) + \bar{t} \ \lambda_1(B) 
+\end{equation}
+
+Sum of smallest eigenvalues is concave (because of trace)
+
+...
+
+\subsection{Semidefinite constrain method}
+
+This method is capable of giving a lower bound for the gorundstate energy:
+
+\begin{equation}
+    E_0 = \inf_{\rho \succcurlyeq 0, \  \mathrm{Tr} (\rho) = 1} \mathrm{Tr}(\rho H)
+\end{equation}
+
+The positivity -- or more precisely the positive semidefinity -- of the density matrix $\rho$ means that the expectation of any positive operator (with respect to $\rho$) is positive:
+
+Lemma:
+
+\begin{equation}
+    \rho \succcurlyeq 0
+    \iff
+    \forall \mathcal{O} \in L(V,V), \ \mathrm{Tr}(\rho \ \mathcal{O}^* \mathcal{O}) \ge0
+\end{equation}
+
+Proof:
+If
+
+\begin{equation}
+    \forall \mathcal{O} \in L(V,V), \ \mathrm{Tr}(\rho \ \mathcal{O}^* \mathcal{O}) \ge0
+    \implies
+    \forall v\in V, v^* \ \cdot \rho \cdot v \ge 0
+\end{equation}
+
+Simply $\mathcal{O}_v = v \circ v$ (or $\mathcal{O}_v=|v\rangle\langle v|$) the set of $\mathcal{O}_v$ is a subset of all linear operators, and
+
+\begin{equation}
+    \mathrm{Tr}(\rho \ \mathcal{O}_v^* \mathcal{O}_v)
+    =
+    \mathrm{Tr}(\mathcal{O}_v \ \rho \ \mathcal{O}_v^*)
+    =
+    \mathrm{Tr}(|v\rangle\langle v| \rho |v\rangle\langle v|)
+    =
+    \langle v| \rho |v\rangle
+\end{equation}
+
+For an ortonormal basis $e_1, \dots e_n$:
+
+\begin{equation}
+    \mathrm{Tr}(A) = \sum_{i} \langle e_i | A | e_i \rangle
+\end{equation}
+
+\begin{equation}
+    \forall v\in V, v^* \ \cdot \rho \cdot v \ge 0
+    \implies
+    \forall \mathcal{O} \in L(V,V), \ \mathrm{Tr}(\rho \ \mathcal{O}^* \mathcal{O}) \ge0
+\end{equation}
+
+\begin{equation}
+    \mathrm{Tr}(\rho \ \mathcal{O}^* \mathcal{O})
+    =
+    \mathrm{Tr}(\mathcal{O} \ \rho \ \mathcal{O}^*)
+    =
+    \sum_{i} \langle e_i | \mathcal{O} \ \rho \ \mathcal{O}^* | e_i \rangle
+\end{equation}
+
+\begin{equation}
+    |f_i \rangle = \mathcal{O} | e_i \rangle 
+\end{equation}
+
+\begin{equation}
+    \mathrm{Tr}(\rho \ \mathcal{O}^* \mathcal{O})
+    =
+    \sum_i \langle f_i |  \rho | f_i \rangle
+    \ge
+    0
+\end{equation}
+
+The idea of the semidefinite constrain method is that instead all operators on a Hilbert space we demand positivity only for a subset of selected operators.
+
+In practice we can define a restricted vectorspace of operators $\mathcal{V}=\mathrm{Spam} \{ \mathcal{O}_1,\dots, \mathcal{O}_K\}$ and relax the full positivity constraint only to positive operators generated from $\mathcal{V}$.
+
+We will call a $\rho'$ operator positive semidefinite on $\mathcal{V}$, if
+
+\begin{equation}
+    \rho' \succcurlyeq_\mathcal{V} 0
+    \iff
+    \forall \mathcal{O} \in \mathcal{V}, \ \mathrm{Tr}(\rho' \ \mathcal{O}^* \mathcal{O})
+    \ge
+    0
+\end{equation}
+
+This positivity restriction for linear operators $\rho'$ is less restrictive then the full positivity criteria, therefore an infinum on this larger set of linear density-like operators provides a lower bound for the smallest eigenvalue:
+
+\begin{equation}
+    \check{E}_0
+    =
+    \inf_{\rho' \succcurlyeq_\mathcal{V} 0, \  \mathrm{Tr} (\rho') = 1} \mathrm{Tr}(\rho' H)
+    \le
+    \inf_{\rho \succcurlyeq 0, \  \mathrm{Tr} (\rho) = 1} \mathrm{Tr}(\rho H)
+    =
+    E_0
+\end{equation}
+
+Lemma:
+$\mathcal{O}_{\underline{a}} = \sum_k a_k \mathcal{O}_k \in \mathcal{V}$
+
+\begin{equation}
+    \forall a \in \mathbb{R}^K, \ 
+    \mathrm{Tr} ( \rho' \ \mathcal{O}_{\underline{a}}^* \mathcal{O}_{\underline{a}} )
+    \ge 0
+    \iff
+    A \succcurlyeq 0, \ A_{ij} = \mathrm{Tr} ( \rho' \ \mathcal{O}_i^* \mathcal{O}_j )
+\end{equation}
+
+Proof:
+\begin{equation}
+    \mathrm{Tr} ( \rho' \ \mathcal{O}_{\underline{a}}^* \mathcal{O}_{\underline{a}} )
+    =
+    \sum_{i,j} \bar{a}_i a_j \mathrm{Tr} ( \rho' \ \mathcal{O}_i^* \mathcal{O}_j )
+    =
+    \sum_{i,j} \bar{a}_i a_j A_{ij}
+    =
+    \underline{a}^* \cdot A \cdot \underline{a}
+\end{equation}
+
+Therefore if the finite $A$ matrix, created from the expectations of the combinations of basis operators is positive semidefnite, then $\rho' \succcurlyeq_\mathcal{V} 0$.
+
+If the Hamiltonian operator $H$ is constructible as a linear combination of basis operator pairs, i.e. $H=\sum_{i,j} \alpha_{i,j} \mathcal{O}^*_i \mathcal{O}_j$, then the minimization with the relaxed semidefinitness criteria can be refolmulated to the language of operator expectations.
+
+If the set of basis operators contain the identity, then the whole constrained minimization process can be refulmulated on the language of operator expextations $\langle\mathcal{O^*_i \mathcal{O}_j}\rangle \in \mathbb{C}$ -- i.e. a finite set of real complex numbers -- without referring to Hilbert spaces or density operators.
+(This is inline with the spirit of Heidenberg's approach from 1925, [...])
+
+Elementary example, the quantum harmonic oscillator:
+
+\begin{equation}
+    H=\frac{1}{2} P^2+ \frac{1}{2} X^2
+\end{equation}
+
+\begin{equation}
+    \mathcal{O_0}=I, \quad \mathcal{O}_1=X, \quad \mathcal{O}_2 = P
+\end{equation}
+
+\begin{equation}
+    A=
+    \begin{bmatrix}
+        \langle I \rangle & \langle X \rangle & \langle P \rangle \\
+        \langle X \rangle & \langle X^2 \rangle & \langle XP \rangle \\
+        \langle P \rangle & \langle PX \rangle & \langle P^2 \rangle
+    \end{bmatrix}
+\end{equation}
+
+\begin{equation}
+    \langle H \rangle = \frac{1}{2} \langle P^2 \rangle + \frac{1}{2} \langle X^2 \rangle
+\end{equation}
+
+And from the canonical commutation relations:
+
+\begin{equation}
+    [X,P] = i I
+    \implies
+    \langle XP \rangle = \frac{1}{2} \langle X P+PX \rangle + \frac{1}{2} i \langle I \rangle
+\end{equation}
+
+and $\langle PX \rangle = \frac{1}{2} \langle X P+PX \rangle - \frac{1}{2} i \langle I \rangle$
+
+\begin{equation}
+    A \succcurlyeq 0
+    \implies
+    \langle X^2 \rangle \langle P^2 \rangle - \langle XP \rangle \langle PX \rangle
+    =
+    \langle X^2 \rangle \langle P^2 \rangle - \frac{1}{4} (\langle \{X,P\} \rangle^2+1)
+    \ge0
+\end{equation}
+
+\begin{equation}
+    \langle X^2 \rangle \langle P^2 \rangle 
+    \ge
+    \frac{1}{4} (\langle \{X,P\} \rangle^2+1)
+    \ge
+    \frac{1}{4}
+\end{equation}
+
+That is explicitly the Heisenberg uncertainty principle.
+
+\begin{equation}
+    \langle X^2 \rangle 
+    \ge
+    \frac{1}{4} \frac{1}{\langle P^2 \rangle }
+    \implies
+    \langle H \rangle \ge \frac{1}{2} \langle P^2 \rangle + \frac{1}{8} \frac{1}{\langle P^2 \rangle }
+\end{equation}
+
+\begin{equation}
+    \check{E}_0
+    =
+    \inf_{\langle P^2 \rangle >0} 
+    \frac{1}{2} \langle P^2 \rangle + \frac{1}{8} \frac{1}{\langle P^2 \rangle }
+    =
+    \frac{1}{2}
+\end{equation}
+
+Where the infinum is reached at $\langle P^2 \rangle=1/2$.
+
+And the corresponding positive definite $A_*$ matrix looks:
+
+\begin{equation}
+    A_*=
+    \begin{bmatrix}
+        1 & 0 & 0 \\
+        0 & \frac{1}{2} & \frac{1}{2} i \\
+        0 & -\frac{1}{2} i & \frac{1}{2} 
+    \end{bmatrix}
+\end{equation}
+
+Quartic oscillator
+
+\begin{equation}
+    H=\frac{1}{2} P^2 + X^4
+\end{equation}
+
+\begin{equation}
+    \mathcal{O_0}=I, \quad \mathcal{O}_1=P, \quad \mathcal{O}_2 = X, \quad \mathcal{O}_3=X^2
+\end{equation}
+
+\begin{equation}
+    A=
+    \begin{bmatrix}
+        \langle I \rangle & \langle P \rangle & \langle X \rangle & \langle X^2 \rangle \\
+        \langle P \rangle & \langle P^2 \rangle & \langle PX \rangle & \langle PX^2 \rangle \\
+        \langle X \rangle & \langle XP \rangle & \langle X^2 \rangle & \langle X^3 \rangle \\
+        \langle X^2 \rangle & \langle X^2P \rangle & \langle X^3 \rangle & \langle X^4 \rangle 
+    \end{bmatrix}
+\end{equation}
+
+\begin{equation}
+    \langle H \rangle = \frac{1}{2} \langle P^2 \rangle + \frac{1}{2} \langle X^4 \rangle
+\end{equation}
+
+\begin{equation}
+    A \succcurlyeq 0
+    \implies
+    \langle X^2 \rangle \langle P^2 \rangle - \langle XP \rangle \langle PX \rangle
+    =
+    \langle X^2 \rangle \langle P^2 \rangle - \frac{1}{4} (\langle \{X,P\} \rangle^2+1)
+    \ge0
+\end{equation}
+
+\begin{equation}
+    A \succcurlyeq 0
+    \implies
+    \langle I \rangle \langle X^4 \rangle - \langle X^2 \rangle \langle X^2 \rangle
+    \ge0
+    \implies
+    \langle X^4 \rangle
+    \ge
+    \langle X^2 \rangle^2
+\end{equation}
+
+\begin{equation}
+    \langle H \rangle \ge \frac{1}{2} \langle P^2 \rangle + 
+    \left ( \frac{1}{4} \frac{1}{\langle P^2 \rangle } \right )^2
+\end{equation}
+
+\begin{equation}
+    \check{E}_0
+    =
+    \inf_{\langle P^2 \rangle >0} 
+    \frac{1}{2} \langle P^2 \rangle + 
+    \left ( \frac{1}{4} \frac{1}{\langle P^2 \rangle } \right )^2
+    =
+    \frac{3}{4^{4/3}}
+    \approx
+    0.472
+\end{equation}
+
+Where the infinum is reached at $\langle P^2 \rangle=2^{-2/3}$.
+
+\begin{equation}
+    A_*=
+    \begin{bmatrix}
+        1 & 0 & 0 & \frac{1}{2} \\
+        0 & \frac{1}{2} & i \frac{1}{2} & 0 \\
+        0 & -i \frac{1}{2} & \frac{1}{2} & 0 \\
+        \frac{1}{2} & 0 & 0 & \frac{1}{4} 
+    \end{bmatrix}
+\end{equation}
+
+That is a positive semidefinite matrix with eigenvalues $(0,0,1,5/4)$
+
+Generalization to compute more accurate lower bounds
+
+Weyl - ordered monomial product:
+
+\[
+\mathcal{W}_{n,m}
+=
+\frac{1}{(n+m)!}
+\sum_{\pi\in S(n+m)}
+A_{\pi(1)}\cdots A_{\pi(n+m)},
+\qquad
+A_1=\cdots=A_n=x,\quad
+A_{n+1}=\cdots=A_{n+m}=p.
+\]
+
+With a product expansion:
+
+\[
+\mathcal{W}_{n,m}\,\mathcal{W}_{r,s}
+=
+\sum_{k=0}^{\min(m,r)}
+\sum_{\ell=0}^{\min(n,s)}
+\left(\frac{i}{2}\right)^{k+\ell}
+(-1)^{\ell}
+\,k!\,\ell!\,
+\binom{m}{k}\binom{r}{k}\binom{n}{\ell}\binom{s}{\ell}\,
+\mathcal{W}_{\,n+r-k-\ell,\;m+s-k-\ell}.
+\]
+
+
+From these operators one can systematically build finite $A$ matrices containing baisis operators $\{ \mathcal{W}_{n,m} | n,m\ge 0, \ n+m \le M \}$ and if the Hamiltonian $H$ can be constructed from the linear combination of $\mathcal{W}$ pair products, then a numerical semidefinite optimization can provide a rigorous lower bound \href{https://reference.wolfram.com/language/ref/SemidefiniteOptimization.html}{\tt SemidefiniteOptimization} can be used in Wolfram Mathematica.
+
+\subsection{Wigner function and phase space formalism}
+
+For harmonic oscillator
+
+\begin{equation}
+    W_n(I) = \frac{(-1)^n}{\pi} L_n(4I) e^{-2 I}
+\end{equation}
+
+For a Hamiltonian operator $H$, construct its phase space function $H(x,p)$, determine the Action-angle variables $(I,\varphi)$, and then we can make an anzats for the density matrix:
+
+\begin{equation}
+    R_n=W_n(I) \star W_n(I)
+\end{equation}
+
+on the phase space. Where $\star$ represents the Moyal product.
+
+We need to take the square of the original $W_n(.)$ functions, because otherwise the positivity of the phase space analogue of the density matrix is not guranteed to be positive.
+
+Of course this is only an anzats, one needs other validation methods to give exact error bounds for the eigen energies related to this guess. One option that is pheseble to compute are the Krylov-Weinstein bounds.
+
+\section{Matrix elements and Form factors}
+
+For a self adoint $A$ operator we can define a perturbed Hamilton operator: 
+
+\begin{equation}
+    H(\kappa) = H+\kappa A
+\end{equation}
+
+if for some interval $\kappa \in (\underline{\kappa}, \overline{\kappa})$ containg $0$ $H(\kappa)$ is bounded from below, then we can derive an exact bound for the ground state matrix element of $A$ with respect to the ground state.
+
+From perturbation theory, for eigenvalues and eigenvectors:
+
+\begin{equation}
+    H |\psi_n\rangle = E_n |\psi_n\rangle
+\end{equation}
+
+\begin{equation}
+    H(\kappa) | \psi_n(\kappa) \rangle = E_n(\kappa) | \psi_n(\kappa) \rangle
+\end{equation}
+
+\begin{equation}
+    E_n'(0) = \langle \psi_n(0) | A | \psi_n(0) \rangle
+\end{equation}
+
+\subsection{Form factors for vacuum or ground state}
+
+On the other hand
+
+\begin{equation}
+    E_0(\kappa) = \inf_{\psi \in \mathcal{H}, ||\psi||=1} \langle \psi | H(\kappa) | \psi \rangle
+\end{equation}
+
+from which follows that $E_0(\kappa)$ is a concave function. (In fact $\sum_{k=0}^n E_k(\kappa)$ is also concave.)
+
+From three upper and lower bounds for the perturbed ground state energy for $\underline{\kappa} \le \kappa_- < 0 < \kappa_+ \le \overline{\kappa}$
+We can give exact lower and upper bounda for the ground state matrix element (or form factor of $A$):
+
+\begin{equation}
+    \frac{\underline{E_0}(\kappa_+) - \overline{E_0}(0)}{\kappa_+}
+    \le
+    E_0'(0)
+    \le
+    \frac{\underline{E_0}(\kappa_-) - \overline{E_0}(0)}{\kappa_-}
+\end{equation}
+
+In fact for the exact bound we need only an upper bound for $E_0$, $\overline{E_0}$ and two lower bounds for the ground states at $\kappa_-, \kappa_+$ $\underline{E_0}(\kappa_-)$ and $\underline{E_0}(\kappa_-)$
+
+For a non-self adjoint operator $\mathcal{O}$ it can be split to two self adjount operators $A=(\mathcal{O}+\mathcal{O}^*)/2$, $B=(\mathcal{O}-\mathcal{O}^*)/(2 i)$ with $\mathcal{O}=A+ i B$
+
+\subsection{``Large operators''}
+
+If $H+\kappa A$ would become unbounded from below if $\kappa<0$ -- consider for example $A=X^4$ for a harmonic oscillator -- but for some power of $H$ the expression would stay bounded, then we can define the following operator:
+
+\begin{equation}
+    F(\kappa)=(H-E)^m + \kappa A
+\end{equation}
+
+If $E < E_0$ then the same arguments can be made to the lowest eigenvalue of $F(\kappa)$ and such an argument provides exact bounds for the vacuum form factors of $A$.
+
+\subsection{Diagonal form factors for excited states}
+
+\begin{equation}
+    F(\kappa) = (H-E)^2+\kappa A
+\end{equation}
+
+If $E$ is close to $E_n$ the $n$-th excited energy level, then by the same convexity argument we can derive exact bounds for the diagonal form factor of $A$ with respect to the $n$-th excited state $\psi_n$.
+
+\subsection{Off-diagonal Form factors}
+
+The problem we wish to solve is the following. We wont to derive exact bounds for the absolute value of the matrix elemenet $|a_{nm}|=|\langle \psi_n | A | \psi_m \rangle|$ for a self-adjoint operator $A$ where $\psi_n$ and $\psi_m$ are exact eigenstates of the Hamiltonian $H$ with energies $E_n$ and $E_m$.
+
+(The eigenstates have a phase freedom in complex Hilbert spaces, therefore the complete $a_{nm}$ is not ``gauge independent''. Taking the absolute value of the matrix element provides a well-defined, ``gauge independent'' quantity.)
+
+First we define a doubled Hilbert space:
+
+\begin{equation}
+    \mathcal{H}^2 = \mathcal{H} \otimes \mathcal{H}
+\end{equation}
+
+And a separable squared Hamilton operator:
+
+\begin{equation}
+    F(E_n^\bullet,E_m^\bullet) = (H-E_n^\bullet)^2 \otimes I + I \otimes (H-E_m^\bullet)^2
+\end{equation}
+
+Where $E_n^\bullet$ and $E_m^\bullet$ are approximate guesses for the exact $E_n, E_m$ eigenvalues.
+
+Assuming that the $n$-th and $m$-th eigenstates are non-degenerate, the ground state of this operator is exactly $|\Psi_0\rangle = | \psi_n \rangle \otimes | \psi_m \rangle$ (with ground state eigenvalue $(E_n-E_n^\bullet)^2+(E_m-E_m^\bullet)^2$)
+
+Now we can introduce a perturbation operator that mixes states from the two spearate Hilbert spaces:
+
+\begin{equation}
+    \mathcal{A} = (A \otimes A) \ \mathcal{C}
+\end{equation}
+
+Where $\mathcal{C}$ is a cyclic operator:
+
+\begin{equation}
+    \mathcal{C} |\varphi_1 \rangle \otimes |\varphi_2 \rangle
+    =
+    |\varphi_2 \rangle \otimes |\varphi_1 \rangle
+\end{equation}
+
+For example for $\mathcal{H}=L^2(\mathbb{R},\mathbb{C})$, $\mathcal{H}^2 = L^2(\mathbb{R}^2,\mathbb{C})$, and $\mathcal{C} \psi(x,y)= \psi(y,x)$
+
+The cyclic operator commutes with the symmetric $A \otimes A$ operator:
+
+\begin{equation}
+    (A \otimes A) \ \mathcal{C} |\varphi_1 \rangle \otimes |\varphi_2 \rangle
+    =
+    (A | \varphi_2 \rangle) \otimes (A | \varphi_1 \rangle)
+    =
+    \mathcal{C} \ (A \otimes A) |\varphi_1 \rangle \otimes |\varphi_2 \rangle
+\end{equation}
+
+Therefore $\mathcal{A}$ is self-adjoint. ($\mathcal{A}^\dagger = \mathcal{C} \ (A^\dagger \otimes A^\dagger) = (A \otimes A) \ \mathcal{C} = \mathcal{A}$)
+
+The ground state expactation for $\mathcal{A}$ in $\mathcal{H}^2$ is:
+
+\begin{equation}
+    \langle\Psi_0| \mathcal{A} |\Psi_0\rangle
+    =
+    \langle\psi_n | A | \psi_m \rangle \langle\psi_m | A | \psi_n \rangle
+    =
+    |a_{nm}|^2
+\end{equation}
+
+By introducing:
+
+\begin{equation}
+    F(\kappa;E_n^\bullet,E_m^\bullet) =
+    (H-E_n^\bullet)^2 \otimes I + I \otimes (H-E_m^\bullet)^2
+    +
+    \kappa \ \mathcal{A}
+\end{equation}
+
+From perturbation theory we get:
+
+\begin{equation}
+    F'_0(0) =
+    \frac{\partial}{\partial \kappa} \lambda_0(F(\kappa;E_n^\bullet, E_m^\bullet)) {\Large |}_{\kappa=0}
+    =
+    \langle\Psi_0| \mathcal{A} |\Psi_0\rangle = |a_{nm}|^2
+\end{equation}
+
+And again refering to the concavity of the ground state energy of self adjoint operators, we can get an exact estimate for $|a_{nm}|$.
+
+If we have exact lower estimates for finite $\kappa_- < 0 < \kappa_+$ values and an exact upper estimate for the lowest eigenvalue for $\kappa=0$, then we can provide the same upper and lower bounds for the first order lowest eigenstate derivative:
+
+\begin{equation}
+    \frac{\underline{F_0}(\kappa_+) - \overline{F_0}(0)}{\kappa_+}
+    \le
+    F_0'(0)
+    \le
+    \frac{\underline{F_0}(\kappa_-) - \overline{F_0}(0)}{\kappa_-}
+\end{equation}
+
+\begin{equation}
+    \sqrt{\max \left ( 0,\frac{\underline{F_0}(\kappa_+) - \overline{F_0}(0)}{\kappa_+} \right )}
+    \le
+    |a_{nm}|
+    \le
+    \sqrt{
+    \frac{\underline{F_0}(\kappa_-) - \overline{F_0}(0)}{\kappa_-}}
+\end{equation}
+
+\subsection{Full complex Form factors for dense operators}
+
+The phase of a non-diagonal matrix element between different eigenstates is not well defined on a complex Hilbert space, because the eigenstates have a phase freedom.
+$\psi_n'=e^{i \alpha_n} \psi_n$ is also an eigenstate with the same eigen energy.
+
+Therefore for a matrix element $\langle \psi_n | A | \psi_m \rangle$ changes if we turn the phases of the eigenstates. $\langle \psi'_n | A | \psi'_m \rangle=e^{i(\alpha_m-\alpha_n)}\langle \psi_n | A | \psi_m \rangle$.
+
+However for any fixed choice of the sets of eigenstates the complex matrix elements will correspond to a representative from an equivalnece class $D^\dagger A D$, for some diagonal phase transformation $D_{nm}=\delta_{nm} e^{i \alpha_n}$. (We will call $D$ a specific gauge.)
+
+If we fix a ``reality condition'' on $A$, i.e. we choose a gauge where for instance the $r$-th row contains real matrix elements, and the $A$ matrix is dense enough (here we assume that all matrix elemenets are non-zero) then one can recover the other complex matrix elements in the following way:
+
+First we can introduce ``gauge-independent cyclic triple products''
+
+\begin{equation}
+    a(i,j,k)=\langle i | A | j \rangle \langle j | A | k \rangle \langle k | A | i \rangle
+\end{equation}
+
+This can be a complex number in general, but its real and imaginary part can be defined as form factors on a tripled Hilbert space $\mathcal{H}^{\otimes 3} = \mathcal{H} \otimes \mathcal{H} \otimes \mathcal{H}$
+
+\begin{equation}
+    F(E_i^\bullet,E_j^\bullet,E_k^\bullet)
+    =
+    (H-E_i^\bullet)^2 \otimes I \otimes I +
+    I \otimes (H-E_j^\bullet)^2 \otimes I +
+    I \otimes I \otimes (H-E_k^\bullet)^2
+\end{equation}
+
+and two self adjoint perturbation operators
+
+\begin{equation}
+    \mathcal{A}_\Re
+    =
+    \frac{1}{2}
+    \left (
+    (A \otimes A \otimes A) \ \mathcal{C}
+    +
+    \mathcal{C}^\dagger \ (A \otimes A \otimes A)
+    \right )
+\end{equation}
+
+\begin{equation}
+    \mathcal{A}_\Im
+    =
+    \frac{1}{2 i}
+    \left (
+    (A \otimes A \otimes A) \ \mathcal{C}
+    -
+    \mathcal{C}^\dagger \ (A \otimes A \otimes A)
+    \right )
+\end{equation}
+
+Where $\mathcal{C}$ is a cyclic operator shifting the variables one to the left:
+
+\begin{equation}
+    \mathcal{C} |i\rangle \otimes |j\rangle \otimes  |k\rangle
+    =
+    |j\rangle \otimes  |k\rangle \otimes |i\rangle
+\end{equation}
+
+\begin{equation}
+    \mathcal{C}^\dagger |i\rangle \otimes |j\rangle \otimes  |k\rangle
+    =
+    |k\rangle \otimes |i\rangle \otimes  |j\rangle
+\end{equation}
+
+The ground state of $F(E_i^\bullet,E_j^\bullet,E_k^\bullet)$ is $|\Psi_0 \rangle = |i\rangle \otimes |j\rangle \otimes  |k\rangle$
+
+And
+
+\begin{equation}
+    \langle \Psi_0 | A_\Re | \Psi_0 \rangle
+    =
+    \frac{1}{2}
+    \left (
+    a_{ij} a_{jk} a_{ki}
+    +
+    (a_{ij} a_{jk} a_{ki})^*
+    \right )
+    =
+    \Re(a_{ij} a_{jk} a_{ki})
+\end{equation}
+
+\begin{equation}
+    \langle \Psi_0 | A_\Im | \Psi_0 \rangle
+    =
+    \frac{1}{2i}
+    \left (
+    a_{ij} a_{jk} a_{ki}
+    -
+    (a_{ij} a_{jk} a_{ki})^*
+    \right )
+    =
+    \Im(a_{ij} a_{jk} a_{ki})
+\end{equation}
+
+Therefore we can introduce:
+
+\begin{equation}
+    F_\Re(\kappa;E_i^\bullet,E_j^\bullet,E_k^\bullet)
+    =
+    F(E_i^\bullet,E_j^\bullet,E_k^\bullet)
+    +
+    \kappa \ 
+    \mathcal{A}_\Re
+\end{equation}
+
+\begin{equation}
+    F_\Im(\kappa;E_i^\bullet,E_j^\bullet,E_k^\bullet)
+    =
+    F(E_i^\bullet,E_j^\bullet,E_k^\bullet)
+    +
+    \kappa \ 
+    \mathcal{A}_\Im
+\end{equation}
+
+And from this we can get exact upper and lower bounds for the real and imaginary parts of $a(i,j,k)=a_{ij} a_{jk} a_{ki}$
+
+Now if we are interested in the complex value of $a_{jk}$ in a gauge where all $a_{sj}$ matrix elements are defined to be real and positive (this can be done if the operator is dense in the energy eigenstate basis), then we have the simple formula:
+
+\begin{equation}
+    a_{jk} = \frac{a(s,j,k)}{\sqrt{|a_{sj}|^2} \sqrt{|a_{ks}|^2}}
+\end{equation}
+
+For the absolute value squares of matrix elements we derived exact upper and lower bounds in the previous section, therefore if we know greater then $0$ lower bounds for $|a_{sj}|^2$ and $|a_{ks}|^2$, then we have exact upper and lower bounds for the real and imaginary parts of $a_{jk}$.
+
+\section{Combination of the methods}
+
+\appendix
+
+\section{Extension of the function algebra with composition}
+
+For a richer function algebra we can extend the allowed symbolic combinations with function composition $\circ$:
+$\mathcal{A}=<\mathbb{R},\cdot,\oplus,\otimes,\circ,\mathsf{a}_1,\mathsf{a}_2,\dots>$
+
+However here we need to take care of the welldefined-ness of the expressions. We introduce the boolean function $\text{Valid} : \mathcal{A} \mapsto \{\text{True},\text{False}\}$
+
+\begin{equation}
+    \text{Valid}[c \cdot \mathsf{A}] = \text{Valid}[\mathsf{A}]
+\end{equation}
+
+\begin{equation}
+    \text{Valid}[\mathsf{A}_1 \oplus \mathsf{A}_2](x)
+    =
+    \text{Valid}[\mathsf{A}_1 \otimes \mathsf{A}_2](x)
+    =
+    \text{Valid}[\mathsf{A}_1](x) 
+    \wedge
+    \text{Valid}[\mathsf{A}_2](x) 
+\end{equation}
+
+\begin{equation}
+    \overline{\text{Max}}^+_0[c \cdot \mathsf{A}]
+    =
+    \begin{cases}
+        |c| \cdot \overline{\text{Max}}^+_0[\mathsf{A}] &\text{ if $\text{Valid}[A]$} \\
+        \infty &\text{ if $\lnot \text{Valid}[A]$}
+    \end{cases}
+\end{equation}
+
+...Similar for plus and times...
+
+\begin{equation}
+    \text{Valid}[\mathsf{A}_2 \circ \mathsf{A}_1]
+    =
+    \begin{cases}
+        \text{Valid}[\mathsf{A}_1](x) 
+    \wedge
+    \text{Valid}[\mathsf{A}_2](x)  &\text{if } [-\overline{\text{Max}}^+_0[\mathsf{A_1}],\overline{\text{Max}}^+_0[\mathsf{A_1}]] \subseteq \mathcal{D} \\
+        \text{False} &\text{ otherwise }
+    \end{cases}
+\end{equation}
+
+\begin{equation}
+    \overline{\text{Max}}^+_0[\mathsf{A}_2 \circ \mathsf{A}_1]
+    =
+        \begin{cases}
+        \overline{\text{Max}}^+_0[\mathsf{A_2}] &\text{ if $\text{Valid}[\mathsf{A}_2 \circ \mathsf{A}_1]$} \\
+        \infty &\text{ if $\lnot \text{Valid}[\mathsf{A}_2 \circ \mathsf{A}_1]$}
+    \end{cases}
+\end{equation}
+
+If $\text{Valid}[\mathsf{A}_2 \circ \mathsf{A}_1]$ is True, then
+
+\begin{equation}
+    \overline{\text{Max}}^+_1[\mathsf{A}_2 \circ \mathsf{A}_1]
+    =
+    \overline{\text{Max}}^+_1[\mathsf{A}_2] 
+    \cdot
+    \overline{\text{Max}}^+_1[\mathsf{A}_1]
+\end{equation}
+
+\begin{equation}
+    \overline{\text{Max}}^+_2[\mathsf{A}_2 \circ \mathsf{A}_1]
+    =
+    \overline{\text{Max}}^+_2[\mathsf{A}_2] 
+    \cdot
+    (\overline{\text{Max}}^+_1[\mathsf{A}_1])^2
+    +
+    \overline{\text{Max}}^+_1[\mathsf{A}_2] 
+    \cdot
+    \overline{\text{Max}}^+_2[\mathsf{A}_1]
+\end{equation}
+
+(If $\text{Valid}[\mathsf{A}_2 \circ \mathsf{A}_1]$ is False, then by convention all these bounds can be set to $\infty$.)
+
+
+Without introducing the concept of validity maybe only with introducing infinite upper bounds we can extend $\overline{\text{Max}}^+_0$ for the compositional algebra.
+
+\begin{equation}
+    \overline{\text{Max}}^+_0[\mathsf{A}_2 \circ \mathsf{A}_1]
+    =
+        \begin{cases}
+        \overline{\text{Max}}^+_0[\mathsf{A_2}] &\text{if } [-\overline{\text{Max}}^+_0[\mathsf{A_1}],\overline{\text{Max}}^+_0[\mathsf{A_1}]] \subseteq \mathcal{D} \\
+        \infty &\text{ otherwise}
+    \end{cases}
+\end{equation}
+
+\newpage
+
+% For url field: https://www.bibtex.com/f/url-field/
+%\bibliographystyle{plaindin}
+
+%\bibliography{ref}
+
+\printbibliography
+
+% For url field: https://www.bibtex.com/f/url-field/
+%\bibliographystyle{plaindin}
+
+%\bibliography{ref}
+
+%\printbibliography
+
+\end{document}
