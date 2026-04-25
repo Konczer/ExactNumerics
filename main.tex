@@ -177,27 +177,38 @@
   \end{flushright}
 \end{quote}
 
-Methods for \href{https://en.wikipedia.org/wiki/Numerical_certification}{Numerical certification}, focusing on ``posteriori'' certification, where guarantees are not derived using an approximation method, but determined using a proposed approximation and some global properties of the problem in question.
+Methods for \href{https://en.wikipedia.org/wiki/Numerical_certification}{Numerical certification}, with special emphasis on ``posteriori'' certification, where guarantees are not derived using the details of the approximation method, but determined using a proposed approximation and some global properties of the problem in question.
 
-\subsection{A few simple examples}
+\subsection{A few simple demonstrating examples}
+
+For some, it might be a strange concept to give exact upper and lower bounds for the solution without knowing the precise solution.
+However, it is possible to give such bounds – that are not the tightest possible, but exact and true – based only on an approximate solution, and typically some global property of the problem.
+
+\subsubsection{A simple root guessing problem}
+
+To demonstrate a basic exact bound reasoning in the context of root finding, consider the following function and root finding problem:
 
 \begin{equation}
-    f(x) = x + \tanh(x) = 1
+    f(x) = x + \tanh(x), \quad f(x) = 1
 \end{equation}
 
-Lets imagine that we got a hint that the root is close to $x^\bullet=0.5$. Is there a way to say something exact about the accuracy of the guess without calculating the root?
-The answer is affirmative, because we can deduce a global property of the $f(.)$ function. It is easy to see, that it derivative is in the range $f'(x) \in (1,2]$. Therefore we can do the following exact statement:
+Let's imagine that we got a hint that the root is close to $x^\bullet=0.5$. Is there a way to say something exact about the accuracy of the guess without calculating the root?
+The answer is affirmative, because we can deduce a global property of the $f(.)$ function. It is easy to see that its derivative is in the range $f’(x) \in (1,2]$. Therefore, we can do the following exact statement referring to the mean value theorem \cite{book:Rudin}:
 
 \begin{equation}
     f(x^*)-f(x^\bullet) = f'(\xi) \cdot (x^*-x^\bullet)
     , \quad \xi \in [x^\bullet, x^*] \subseteq \mathbb{R}
 \end{equation}
 
+After taking the absolute value of both sides, we can state the following inequality:
+
 \begin{equation}
     |f(x^*)-f(x^\bullet)| = |f'(\xi)| \cdot |x^*-x^\bullet| 
     \ge
     \inf_{\xi \in \mathbb{R}} |f'(\xi)| \cdot |x^*-x^\bullet| 
 \end{equation}
+
+And while $\inf_{\xi \in \mathbb{R}} |f'(\xi)| = 1$ for this particular function, we get following exact bound:
 
 \begin{equation}
     |x^*-x^\bullet| \le \frac{|f(x^*)-f(x^\bullet)|}{\inf_{\xi \in \mathbb{R}} |f'(\xi)|}
