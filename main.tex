@@ -227,7 +227,7 @@ Therefore with this educated (or lucky) guess we can exactly state that:
 Let say we have a $f \in C^2(\mathbb{R},\mathbb{R})$ (in fact it is enough to be twice differentiable (without the requirement of continuity\footnote{Or perhaps more generally that $f'(.)$ is a (locally) Lipschitz function.}), and boundedness of the second derivative on an open domain.)
 And we search for a root of this function $x^* \in \mathbb{R}, \ f(x^*)= 0$.
 
-If we can independently prove that on some open domain $\mathcal{D}$ the absolute value of the second derivative is bounded:
+If we can independently prove that on some open domain $\mathcal{D}$, containing a root ($x^* \in \mathcal{D}$) the absolute value of the second derivative is bounded:
 
 \begin{equation}
     \exists M \in \mathbb{R}, \ \forall x \in \mathcal{D} \ |f''(x)|\le M
@@ -235,7 +235,7 @@ If we can independently prove that on some open domain $\mathcal{D}$ the absolut
 
 Then -- if we are close enough to a root -- an exact interval can be determined:
 
-Let say that we are at $x^\circ$, where the value is $f(x^\circ) \ne 0$ and we know the derivative $f'(x^\circ)$.
+Let say that we are at $x^\circ$, where the value is $f(x^\circ) \ne 0$ and we know the derivative $f'(x^\circ)$. By recalling Taylor's theorem \cite{book:Rudin}:
 
 \begin{equation}
     f(x) = f(x^\circ) + f'(x^\circ) (x-x^\circ) + \frac{1}{2} f''(\xi) (x-x^\circ)^2, \quad \xi \in \{t\ x+ (1-t) \ x^\circ \ | \ t \in [0,1]]
@@ -266,7 +266,9 @@ If
     \mathcal{S} \subseteq \mathcal{D} \implies x^* \in \mathcal{S}
 \end{equation}
 
-In the one dimensional case we can provide explicit lower and upper bounds from this observation simply by solving a second order inequality: ...
+In the one dimensional case we can provide explicit lower and upper bounds from this observation simply by solving a second order inequality:
+
+This reasonong essentially recovers the Newton-Kantorovich Theorem \cite{book:OrtegaIterativeSolutionOfNonlinearEquations}.
 
 \paragraph{A note on determining the upper bound:}
 In general determining a valid upper bound of the second derivative of a function on a domain $\mathcal{D}$ can be challenging. However there are a few simple techniques by which this can be done if the function $f(.)$ is constructed from simpler components.
