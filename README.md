@@ -57,7 +57,39 @@ This opens the possibility of a numerical analogue of formally verified AI-assis
 
 The present project focuses primarily on this *verification and certification layer*. In a larger computational pipeline, we imagine these methods operating at the end of a potentially sophisticated chain of numerical solvers and solution-generating methods:
 
-**Numerical problem → quantities of interest and tolerances → candidate solution → rigorous certification → certified result**
+```mermaid
+flowchart LR
+
+    A("Numerical problem<br/>+ global properties")
+    B("Quantities of interest<br/>+ tolerances")
+    C("Candidate solution<br/>numerical/ML/heuristic/...")
+    D("Rigorous certification")
+    E{"Within tolerance?"}
+    F("Certified result")
+    G("Refine candidate")
+
+    A ==> B
+    B ==> C
+    C ==> D
+    D ==> E
+    E ==>|Yes| F
+    E ==>|No| G
+    G ==> C
+
+    classDef normal fill:#f8fafc,stroke:#94a3b8,stroke-width:5.5px,color:#1e293b;
+    classDef comp fill:#f5f0fa,stroke:#7e57c2,stroke-width:5px,color:#1e293b;
+    classDef cert fill:#eff6ff,stroke:#3b82f6,stroke-width:5px,color:#1e293b;
+    classDef success fill:#f0fdf4,stroke:#4ade80,stroke-width:5px,color:#1e293b;
+    classDef retry fill:#fff7ed,stroke:#f59e0b,stroke-width:5px,color:#1e293b;
+
+    class A,B normal;
+    class C comp;
+    class D,E cert;
+    class F success;
+    class G retry;
+```
+
+
 
 The method used to generate the candidate may be approximate, heuristic, learned, or experimental; the final guarantee should not be.
 
@@ -79,7 +111,6 @@ We would also be very grateful for references to relevant papers, existing numer
 If you are interested in contributing, testing ideas, suggesting references, or developing part of the project further, **please get in touch**. We are very open to collaboration.
 
 
-
 ## Citation
 
 If you find this work useful, please consider citing:
@@ -92,3 +123,8 @@ If you find this work useful, please consider citing:
   url    = {https://github.com/Konczer/ExactNumerics}
 }
 ```
+
+
+
+
+
