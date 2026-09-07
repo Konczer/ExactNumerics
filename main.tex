@@ -33,6 +33,8 @@
 
 \usepackage{yfonts}
 \usepackage{mathrsfs}
+\usepackage{physics} % For \ket, \bra, etc.
+\usepackage{amsmath}
 \usepackage{pifont}
 \usepackage{ifsym}
 \usepackage{bbm}
@@ -263,10 +265,59 @@ The solution set can be defined as follows:
 If
 
 \begin{equation}
-    \mathcal{S} \subseteq \mathcal{D} \implies x^* \in \mathcal{S}
+    \mathcal{S} \subseteq \mathcal{D} \implies \exists x^* \in \mathcal{S}, \ f(x^*)=0
 \end{equation}
 
 In the one dimensional case we can provide explicit lower and upper bounds from this observation simply by solving a second order inequality:
+
+\begin{equation}
+    |f(x^\circ) + f'(x^\circ) (x-x^\circ)| \le \frac{1}{2} M (x-x^\circ)^2
+\end{equation}
+
+For $2 M | f(x^\circ)|<f'(x^\circ)^2$
+
+\begin{equation}
+    I^\diamond
+    =
+    \left \{
+    x^\circ - 
+    \frac{f'(x^\circ)}{m} 
+    \left ( 
+    \sqrt{1-2 m \frac{f(x^\circ)}{f'(x^\circ)^2}}
+    -
+    1
+    \right )
+    \ {\Large |} \ 
+    m \in [-M,0)\cup(0,M]
+    \right \}
+    \bigcup
+    \left \{
+    x^\circ - \frac{f(x^\circ)}{f'(x^\circ)}
+    \right \}
+\end{equation}
+
+For $f(x^\circ)>0$ and $f'(x^\circ)>0$
+
+\begin{equation}
+    I^\diamond
+    =
+    \left [
+    x^\circ - 
+    \frac{f'(x^\circ)}{M} 
+    \left ( 
+    1-
+    \sqrt{1-2 M \frac{f(x^\circ)}{f'(x^\circ)^2}}
+    \right )
+    ,
+    x^\circ - 
+    \frac{f'(x^\circ)}{M} 
+    \left ( 
+    \sqrt{1+2 M \frac{f(x^\circ)}{f'(x^\circ)^2}}
+    -
+    1
+    \right )
+    \right ]
+\end{equation}
 
 This reasonong essentially recovers the Newton-Kantorovich Theorem \cite{book:OrtegaIterativeSolutionOfNonlinearEquations}.
 
@@ -939,6 +990,730 @@ then we know that ...
 
 In the quartic case the $x \to -x$ is a symmetry, therefore we can look for the $(\psi_\uparrow(x),\psi_\downarrow(x))$ pairs as $(\psi(x)/\sqrt{2},\psi(-x)/\sqrt{2})$
 
+\subsubsection{Super symmetric field theory example}
+
+The auxiliary space method can be generalized to SUSY field theories, where observable operators -- such as H and P -- can be defined as the products of some charge operators $\mathcal{Q}$. In the following we present a sketch, how non-trivial approximative dispersion relations can be derived in 1+1D SUSY field theories.
+
+{\bf ChatGPT assisted:}
+
+\paragraph{Basic construction: interacting \(1+1\)D supersymmetric QFT with (real) superpotential $W$}
+
+We consider the standard \(1+1\)-dimensional \(\mathcal N=(1,1)\) Wess--Zumino model with one real scalar field \(\phi(t,x)\) and one Majorana fermion $\psi_\pm(t,x)$, written in terms of two real chiral components
+\[
+\psi_+(t,x), \qquad \psi_-(t,x).
+\]
+We use Minkowski coordinates $x^\mu$ and metric $\eta_{\mu \nu}$
+\[
+    x^0=t, \quad x^1=x, \quad 
+    \eta=\begin{bmatrix}
+    1 & 0 \\ 0 & -1 \end{bmatrix},
+\]
+and abbreviate
+\[
+\dot\phi=\partial_t\phi(t,x), \qquad \phi'=\partial_x\phi(t,x).
+\]
+
+\paragraph{Lagrangian density}
+
+Given a real superpotential \(W(\phi)\), the component Lagrangian density is
+\begin{equation}
+\boxed{
+\mathcal{L}
+=
+\frac12 \dot\phi^{\,2}
+-\frac12 \phi'^{\,2}
++\frac{i}{2}\psi_+(\partial_t-\partial_x)\psi_+
++\frac{i}{2}\psi_-(\partial_t+\partial_x)\psi_-
+-\frac12 \bigl(W'(\phi)\bigr)^2
+- W''(\phi)\,\psi_+\psi_- .
+}
+\end{equation}
+
+The bosonic potential is therefore
+\begin{equation}
+\boxed{
+V(\phi)=\frac12 \bigl(W'(\phi)\bigr)^2.
+}
+\end{equation}
+
+This defines an interacting QFT whenever \(W\) is nonlinear.
+
+\paragraph{Canonical momentum}
+
+The conjugate momentum of \(\phi\) is
+\begin{equation}
+\boxed{
+\pi(t,x)=\frac{\partial \mathcal L}{\partial \dot\phi}=\dot\phi.
+}
+\end{equation}
+
+\paragraph{Hamiltonian density and Hamiltonian}
+
+The Hamiltonian density is
+\begin{equation}
+\boxed{
+\mathcal H
+=
+\frac12 \pi^2
++\frac12 \phi'^2
++\frac12 \bigl(W'(\phi)\bigr)^2
+-\frac{i}{2}\psi_+\partial_x\psi_+
++\frac{i}{2}\psi_-\partial_x\psi_-
++W''(\phi)\,\psi_+\psi_- .
+}
+\end{equation}
+Hence the Hamiltonian is
+\begin{equation}
+\boxed{
+H=\int dx\,\mathcal H.
+}
+\end{equation}
+
+\paragraph{Momentum density and momentum}
+
+The momentum density is
+\begin{equation}
+\boxed{
+\mathcal P
+=
+\pi\,\phi'
+-\frac{i}{2}\psi_+\partial_x\psi_+
+-\frac{i}{2}\psi_-\partial_x\psi_- .
+}
+\end{equation}
+Hence the spatial momentum operator is
+\begin{equation}
+\boxed{
+P=\int dx\,\mathcal P.
+}
+\end{equation}
+
+\paragraph{Equal-time canonical brackets}
+
+At equal time, the canonical relations are
+\begin{equation}
+\boxed{
+[\phi(x),\pi(y)]=i\delta(x-y),
+}
+\end{equation}
+and
+\begin{equation}
+\boxed{
+\{\psi_+(x),\psi_+(y)\}=\delta(x-y), \qquad
+\{\psi_-(x),\psi_-(y)\}=\delta(x-y), \qquad
+\{\psi_+(x),\psi_-(y)\}=0.
+}
+\end{equation}
+
+\paragraph{Self-adjointness of the fields}
+
+\[
+\phi^\dagger=\phi,
+\qquad
+\psi_+^\dagger=\psi_+,
+\qquad
+\psi_-^\dagger=\psi_-.
+\]
+
+Thus \(\phi\) is a real scalar field, while \(\psi_\pm\) are real Majorana fermion components.  
+In particular, for a real superpotential \(W(\phi)\),
+\[
+W(\phi)^\dagger=W(\phi),
+\qquad
+W'(\phi)^\dagger=W'(\phi).
+\]
+
+\paragraph{Supercharges}
+
+A convenient Hermitian choice of supercharges is
+\begin{equation}
+\boxed{
+Q_+
+=
+\int dx\,
+\Big[
+(\pi+\phi')\psi_+
+-
+W'(\phi)\psi_-
+\Big]
+=
+Q_+^\dagger
+}
+\end{equation}
+\begin{equation}
+\boxed{
+Q_-
+=
+\int dx\,
+\Big[
+(\pi-\phi')\psi_-
++
+W'(\phi)\psi_+
+\Big]
+=
+Q_-^\dagger
+}
+\end{equation}
+
+\paragraph{Supersymmetry algebra}
+
+These satisfy the \(1+1\)-dimensional supersymmetry algebra
+\begin{equation}
+\boxed{
+\{Q_+,Q_+\}=2(H+P), \qquad
+\{Q_-,Q_-\}=2(H-P), \qquad
+\{Q_+,Q_-\}=2Z.
+}
+\end{equation}
+Here
+\begin{equation}
+\boxed{
+Z=\int dx\,\partial_x W(\phi)
+=
+W(\phi(+\infty))-W(\phi(-\infty))
+}
+\end{equation}
+is the topological central charge on the line.
+
+On a spatial circle, or in the topologically trivial sector, one usually has $Z=0$.
+
+From the first two anti-commutators we have:
+
+\begin{equation}
+\boxed{
+Q_+^2=H+P, \qquad Q_-^2=H-P.
+}
+\end{equation}
+
+\paragraph{Dispersion relation}
+
+If \(|\Psi\rangle\) is a simultaneous eigenstate of energy and momentum,
+\begin{equation}
+H|\Psi\rangle=E|\Psi\rangle, \qquad P|\Psi\rangle=p|\Psi\rangle,
+\end{equation}
+then in the sector \(Z=0\),
+\begin{equation}
+\boxed{
+Q_+^2|\Psi\rangle=(E+p)|\Psi\rangle, \qquad
+Q_-^2|\Psi\rangle=(E-p)|\Psi\rangle.
+}
+\end{equation}
+Thus it is natural to define the chiral energies
+\begin{equation}
+\boxed{
+E_+=E+p, \qquad E_-=E-p,
+}
+\end{equation}
+so that
+\begin{equation}
+\boxed{
+E=\frac{E_++E_-}{2}, \qquad p=\frac{E_+-E_-}{2}.
+}
+\end{equation}
+
+This is the basic reason why the dispersion relation can be studied through the supercharges \(Q_\pm\).
+
+\paragraph{Complex supercharge.}
+Define the complex combination
+\begin{equation}
+\boxed{
+\mathcal Q := Q_+ + i Q_-,
+\qquad
+\mathcal Q^\dagger = Q_+ - i Q_-.
+}
+\end{equation}
+A direct computation gives
+\begin{equation}
+\boxed{
+\mathcal Q^2
+=
+(Q_+ + iQ_-)^2
+=
+Q_+^2 - Q_-^2 + i\{Q_+,Q_-\}
+=
+2P + 2iZ,
+}
+\end{equation}
+and similarly
+\begin{equation}
+\boxed{
+(\mathcal Q^\dagger)^2 = 2P - 2iZ.
+}
+\end{equation}
+Moreover,
+\begin{equation}
+\boxed{
+\{\mathcal Q,\mathcal Q^\dagger\}
+=
+2(Q_+^2+Q_-^2)
+=
+4H.
+}
+\end{equation}
+The ordinary commutator is
+\begin{equation}
+\boxed{
+[\mathcal Q,\mathcal Q^\dagger]
+=
+-2i[Q_+,Q_-],
+}
+\end{equation}
+so \(\mathcal Q\) is not normal in general.
+
+\paragraph{Rest frame and topologically trivial sector.}
+In the sector
+\[
+P=0,\qquad Z=0,
+\]
+one has
+\begin{equation}
+\boxed{
+\mathcal Q^2=0,
+\qquad
+\{\mathcal Q,\mathcal Q^\dagger\}=4H.
+}
+\end{equation}
+Thus \(\mathcal Q\) is nilpotent in the rest frame, and the Hamiltonian is recovered from the anticommutator:
+\begin{equation}
+\boxed{
+H=\frac14\bigl(\mathcal Q\mathcal Q^\dagger+\mathcal Q^\dagger\mathcal Q\bigr).
+}
+\end{equation}
+
+\paragraph{Important remark.}
+Since \(\mathcal Q^2=0\) in the sector \(P=Z=0\), every exact eigenvalue of \(\mathcal Q\) is zero. Therefore an ``approximate eigenvector'' of \(\mathcal Q\) alone cannot determine a positive rest mass: it can only test closeness to the kernel of \(\mathcal Q\), i.e. to a supersymmetric ground state.
+
+To obtain a positive rest-mass bound for an excited bound state, one should instead use the auxiliary self-adjoint operator
+\begin{equation}
+\boxed{
+\mathbb D :=
+\begin{pmatrix}
+0 & \mathcal Q^\dagger\\
+\mathcal Q & 0
+\end{pmatrix}
+}
+\qquad
+\text{on }\mathcal H\otimes \mathbb C^2.
+\end{equation}
+Then \(\mathbb D^\dagger=\mathbb D\), and in the sector \(P=Z=0\),
+\begin{equation}
+\boxed{
+\mathbb D^2
+=
+\begin{pmatrix}
+\mathcal Q^\dagger\mathcal Q & 0\\
+0 & \mathcal Q\mathcal Q^\dagger
+\end{pmatrix}.
+}
+\end{equation}
+Using
+\[
+\mathcal Q^\dagger\mathcal Q+\mathcal Q\mathcal Q^\dagger=4H,
+\]
+one sees that \(\mathbb D\) is the natural square-root object for the rest-frame problem.
+
+\paragraph{Trial state.}
+Let \(\Psi^\bullet\in\mathcal H\) be a normalized trial state representing a candidate \(P=0\) bound state, and form the doubled-space trial vector
+\begin{equation}
+\boxed{
+\Phi^\bullet :=
+\begin{pmatrix}
+\Psi^\bullet\\
+\Psi^\bullet
+\end{pmatrix}
+\in \mathcal H\otimes \mathbb C^2.
+}
+\end{equation}
+
+\paragraph{Approximate \(\mathbb D\)-eigenvector and Krylov--Weinstein bound.}
+Assume that for some \(d\ge 0\),
+\begin{equation}
+\boxed{
+\|(\mathbb D-d)\Phi^\bullet\|^2 \le \varepsilon.
+}
+\end{equation}
+Since \(\mathbb D\) is self-adjoint, the spectral theorem implies that there exists
+\[
+\mu\in \operatorname{spec}(\mathbb D)
+\]
+such that
+\begin{equation}
+|\mu-d|\le \sqrt{\varepsilon}.
+\end{equation}
+Squaring,
+\[
+\lambda:=\mu^2\in \operatorname{spec}(\mathbb D^2),
+\]
+and therefore
+\begin{equation}
+\boxed{
+|\lambda-d^2|
+\le
+\sqrt{\varepsilon}\,\bigl(2d+\sqrt{\varepsilon}\bigr).
+}
+\end{equation}
+
+\paragraph{From \(\mathbb D^2\) to the rest mass.}
+In the rest frame, a stable bound state of mass \(M\) satisfies
+\[
+H\Psi = M\Psi.
+\]
+Since \(\mathbb D^2\) has diagonal blocks \(\mathcal Q^\dagger\mathcal Q\) and \(\mathcal Q\mathcal Q^\dagger\), and
+\[
+\mathcal Q^\dagger\mathcal Q+\mathcal Q\mathcal Q^\dagger=4H,
+\]
+the spectrum of \(\mathbb D^2\) is controlled by the rest-energy spectrum. In particular, if \(\Phi^\bullet\) has good overlap with one rest-frame bound-state multiplet, then the corresponding mass \(M\) satisfies the estimate
+\begin{equation}
+\boxed{
+|\,4M - d^2\,|
+\;\lesssim\;
+\sqrt{\varepsilon}\,\bigl(2d+\sqrt{\varepsilon}\bigr),
+}
+\end{equation}
+or equivalently
+\begin{equation}
+\boxed{
+\left|\,M-\frac{d^2}{4}\,\right|
+\;\lesssim\;
+\frac14\,\sqrt{\varepsilon}\,\bigl(2d+\sqrt{\varepsilon}\bigr).
+}
+\end{equation}
+Thus the rest mass is approximated by
+\begin{equation}
+\boxed{
+M \approx \frac{d^2}{4},
+}
+\end{equation}
+with an error controlled by the residual \(\varepsilon\).
+
+\paragraph{Conclusion.}
+The complex supercharge \(\mathcal Q\) is the natural nilpotent object in the rest-frame sector \(P=Z=0\), but by itself it only probes the supersymmetric kernel. For a positive rest-mass estimate one should pass to the auxiliary self-adjoint operator \(\mathbb D\). If \(\Phi^\bullet\) is an approximate \(\mathbb D\)-eigenvector, then a Krylov--Weinstein bound yields a quantitative estimate for the rest mass of the bound state. Once the rest mass \(M\) of a stable bound state is known, Lorentz invariance fixes the full dispersion relation:
+\begin{equation}
+\boxed{
+E(p)=\sqrt{p^2+M^2}.
+}
+\end{equation}
+
+\paragraph{Two simple interacting choices of superpotential}
+
+A convenient class of \(1+1\)-dimensional \(\mathcal N=(1,1)\) supersymmetric field theories is obtained by choosing a real superpotential \(W(\phi)\). Two simple and useful interacting examples are the following.
+
+\paragraph{1. Quartic Wess--Zumino model.}
+Take
+\begin{equation}
+\boxed{
+W(\phi)=\frac{m}{2}\phi^2+\frac{g}{4}\phi^4.
+}
+\end{equation}
+Then
+\begin{equation}
+W'(\phi)=m\phi+g\phi^3,
+\qquad
+W''(\phi)=m+3g\phi^2.
+\end{equation}
+This model reduces to the free massive theory when \(g=0\), and becomes interacting for \(g\neq 0\). Around the vacuum at \(\phi=0\), the tree-level mass is \(m\), while the exact physical one-particle mass is expected to depend nontrivially on the coupling \(g\).
+
+\paragraph{2. Supersymmetric sine-Gordon model.}
+Take
+\begin{equation}
+\boxed{
+W(\phi)=\frac{\mu}{\beta^2}\cos(\beta\phi).
+}
+\end{equation}
+Then
+\begin{equation}
+W'(\phi)=-\frac{\mu}{\beta}\sin(\beta\phi),
+\qquad
+W''(\phi)=-\mu\cos(\beta\phi).
+\end{equation}
+This is a genuinely interacting model with a periodic vacuum structure. The parameter \(\beta\) controls the interaction strength, and the physical spectrum is expected to depend nontrivially on \(\beta\). It is a natural candidate for studying nontrivial one-particle states, bound states, and topological sectors.
+
+\paragraph{Summary.}
+The quartic Wess--Zumino model is a simple deformation of the free massive theory and is a natural first testing ground. The supersymmetric sine-Gordon model is more structurally rich and is a natural target for studying genuinely nontrivial interacting supersymmetric spectra.
+
+
+
+\subsection*{Quartic Wess--Zumino model at rest: explicit \(\mathcal Q\), \(\mathbb D\), and trial state}
+
+Consider the \(1+1\)-dimensional \(\mathcal N=(1,1)\) Wess--Zumino model with
+\begin{equation}
+\boxed{
+W(\phi)=\frac{m}{2}\phi^2+\frac{g}{4}\phi^4.
+}
+\end{equation}
+Then
+\begin{equation}
+W'(\phi)=m\phi+g\phi^3,
+\qquad
+W''(\phi)=m+3g\phi^2.
+\end{equation}
+
+We work in the topologically trivial sector \(Z=0\), and in the rest-frame sector \(P=0\).
+
+\paragraph{Real supercharges.}
+A standard choice of supercharges is
+\begin{equation}
+\boxed{
+Q_+
+=
+\int_0^L dx\,
+\Big[(\pi+\phi')\psi_+-(m\phi+g\phi^3)\psi_-\Big],
+}
+\end{equation}
+\begin{equation}
+\boxed{
+Q_-
+=
+\int_0^L dx\,
+\Big[(\pi-\phi')\psi_-+(m\phi+g\phi^3)\psi_+\Big].
+}
+\end{equation}
+
+\paragraph{Complex supercharge.}
+Define
+\begin{equation}
+\boxed{
+\mathcal Q:=Q_+ + iQ_-,
+\qquad
+\mathcal Q^\dagger = Q_+ - iQ_-.
+}
+\end{equation}
+Substituting the explicit formulas for \(Q_\pm\),
+\begin{equation}
+\boxed{
+\mathcal Q
+=
+\int_0^L dx\,
+\Big[
+(\pi+\phi')\psi_+
++i(\pi-\phi')\psi_-
++(m\phi+g\phi^3)(\,i\psi_+ - \psi_-)
+\Big].
+}
+\end{equation}
+It is convenient to split
+\begin{equation}
+\mathcal Q=\mathcal Q^{(0)}+g\,\Delta\mathcal Q,
+\end{equation}
+with
+\begin{equation}
+\boxed{
+\mathcal Q^{(0)}
+=
+\int_0^L dx\,
+\Big[
+(\pi+\phi')\psi_+
++i(\pi-\phi')\psi_-
++m\phi(\,i\psi_+ - \psi_-)
+\Big],
+}
+\end{equation}
+\begin{equation}
+\boxed{
+\Delta\mathcal Q
+=
+\int_0^L dx\,
+\phi^3(\,i\psi_+ - \psi_-).
+}
+\end{equation}
+(If one works with normal ordering relative to the free vacuum, replace \(\phi^3\) by \(:\!\phi^3\!:\).)
+
+\paragraph{Algebra in the rest frame.}
+Since \(Z=0\),
+\begin{equation}
+\mathcal Q^2 = 2P.
+\end{equation}
+Hence in the rest-frame sector \(P=0\),
+\begin{equation}
+\boxed{
+\mathcal Q^2=0.
+}
+\end{equation}
+Also
+\begin{equation}
+\boxed{
+\{\mathcal Q,\mathcal Q^\dagger\}=4H.
+}
+\end{equation}
+
+\paragraph{Auxiliary self-adjoint operator.}
+On the doubled Hilbert space \(\mathcal H\otimes \mathbb C^2\), define
+\begin{equation}
+\boxed{
+\mathbb D
+:=
+\begin{pmatrix}
+0 & \mathcal Q^\dagger\\
+\mathcal Q & 0
+\end{pmatrix}.
+}
+\end{equation}
+Then \(\mathbb D^\dagger=\mathbb D\), and
+\begin{equation}
+\boxed{
+\mathbb D^2
+=
+\begin{pmatrix}
+\mathcal Q^\dagger\mathcal Q & 0\\
+0 & \mathcal Q\mathcal Q^\dagger
+\end{pmatrix}.
+}
+\end{equation}
+In the sector \(P=0\), one has
+\begin{equation}
+\mathcal Q^\dagger\mathcal Q+\mathcal Q\mathcal Q^\dagger=4H.
+\end{equation}
+
+\paragraph{Free rest-frame one-particle states.}
+At \(g=0\), the theory is free and massive. Let \(|0\rangle\) be the free vacuum, and let
+\begin{equation}
+|B_0\rangle := a_0^\dagger |0\rangle,
+\qquad
+|F_0\rangle := b_0^\dagger |0\rangle
+\end{equation}
+denote the normalized bosonic and fermionic one-particle rest states (\(k=0\) mode). They satisfy
+\begin{equation}
+H_0 |B_0\rangle = m |B_0\rangle,
+\qquad
+H_0 |F_0\rangle = m |F_0\rangle.
+\end{equation}
+The free complex supercharge may be normalized so that
+\begin{equation}
+\boxed{
+\mathcal Q^{(0)} |B_0\rangle = 2\sqrt m\, |F_0\rangle,
+\qquad
+(\mathcal Q^{(0)})^\dagger |F_0\rangle = 2\sqrt m\, |B_0\rangle.
+}
+\end{equation}
+Equivalently,
+\begin{equation}
+\mathcal Q^{(0)}|F_0\rangle=0,
+\qquad
+(\mathcal Q^{(0)})^\dagger|B_0\rangle=0,
+\end{equation}
+in a convenient basis of the rest multiplet.
+
+\paragraph{Choice of trial state.}
+On the original Hilbert space, take as trial state the free bosonic rest state
+\begin{equation}
+\boxed{
+\Psi^\bullet := |B_0\rangle.
+}
+\end{equation}
+For the auxiliary operator \(\mathbb D\), the natural doubled trial vector is
+\begin{equation}
+\boxed{
+\widehat\Psi^\bullet
+:=
+\frac{1}{\sqrt2}
+\begin{pmatrix}
+|B_0\rangle\\[1mm]
+|F_0\rangle
+\end{pmatrix}
+\in \mathcal H\otimes\mathbb C^2.
+}
+\end{equation}
+Using the free relations above,
+\begin{equation}
+\boxed{
+\mathbb D_0\,\widehat\Psi^\bullet
+=
+2\sqrt m\,\widehat\Psi^\bullet,
+}
+\end{equation}
+where
+\begin{equation}
+\mathbb D_0 :=
+\begin{pmatrix}
+0 & (\mathcal Q^{(0)})^\dagger\\
+\mathcal Q^{(0)} & 0
+\end{pmatrix}.
+\end{equation}
+
+\paragraph{Residual at \(g>0\).}
+Now regard the same \(\widehat\Psi^\bullet\) as a trial vector for the interacting operator \(\mathbb D\). Define
+\begin{equation}
+\boxed{
+\varepsilon(g)
+:=
+\bigl\|(\mathbb D-2\sqrt m)\widehat\Psi^\bullet\bigr\|^2.
+}
+\end{equation}
+Since \(\mathbb D=\mathbb D_0 + g\,\Delta\mathbb D\), with
+\begin{equation}
+\Delta\mathbb D :=
+\begin{pmatrix}
+0 & (\Delta\mathcal Q)^\dagger\\
+\Delta\mathcal Q & 0
+\end{pmatrix},
+\end{equation}
+and \(\mathbb D_0\widehat\Psi^\bullet=2\sqrt m\,\widehat\Psi^\bullet\), one gets
+\begin{equation}
+\boxed{
+\varepsilon(g)=g^2\,\|\Delta\mathbb D\,\widehat\Psi^\bullet\|^2.
+}
+\end{equation}
+Writing
+\begin{equation}
+\boxed{
+C
+:=
+\|\Delta\mathbb D\,\widehat\Psi^\bullet\|^2
+=
+\frac12\Big(
+\|\Delta\mathcal Q\,|B_0\rangle\|^2
++
+\|(\Delta\mathcal Q)^\dagger\,|F_0\rangle\|^2
+\Big),
+}
+\end{equation}
+we have
+\begin{equation}
+\boxed{
+\varepsilon(g)=g^2 C.
+}
+\end{equation}
+
+\paragraph{Krylov--Weinstein bound.}
+Since \(\mathbb D\) is self-adjoint, there exists
+\[
+\nu(g)\in \operatorname{spec}(\mathbb D)
+\]
+such that
+\begin{equation}
+\boxed{
+|\nu(g)-2\sqrt m|\le |g|\,\sqrt C.
+}
+\end{equation}
+Squaring,
+\begin{equation}
+\boxed{
+|\nu(g)^2-4m|
+\le
+|g|\,\sqrt C\,
+\bigl(4\sqrt m + |g|\sqrt C\bigr).
+}
+\end{equation}
+
+\paragraph{Rest-mass estimate.}
+If the nearby level corresponds to a stable rest-frame one-particle or bound-state multiplet of mass \(M(g)\), then \(\nu(g)^2=4M(g)\), so
+\begin{equation}
+\boxed{
+|M(g)-m|
+\le
+|g|\,\sqrt C\,\sqrt m
++\frac{g^2}{4}C.
+}
+\end{equation}
+
+Thus the method gives an explicit rest-mass bound for the interacting theory using the free one-particle rest state as trial input.
+
+
+
+
+
+{\bf End of ChatGPT assistance}
+
 \subsection{Schur-complement method}
 
 Splitting the vector space into two component -- for example ``Low'' and ``High'' energy components.
@@ -1177,6 +1952,207 @@ Essentially the same argument gives that there has to be a spactrum point betwee
 \subsection{Hoffman-Wielandt inequality}
 
 \subsection{Action based semiclassical matching}
+
+In the literature such thoughts appeared first probably in 1953 \cite{paper:GoodMiller1953}
+
+Take a 1D Schrodinger equation:
+
+\begin{equation}
+    -\frac{1}{2} \psi''(x) + V(x) \psi(x) = E \psi(x)
+\end{equation}
+
+That can be modified to:
+
+\begin{equation}
+    -\frac{1}{2} \frac{\psi''(x)}{\psi(x)} + V(x) = E
+\end{equation}
+
+Assume that we know an exact wave function solution for a potential $V_0$, being $\phi$ with energy $E_0$, where $V$ is ``close to'' $V_0$.
+
+We will search for a wave function ansatz:
+
+\begin{equation}
+    \psi^\bullet(x) = \frac{1}{\sqrt{y'(x)}} \phi(y(x))
+\end{equation}
+
+Where $y(x)$ is assumed to be a one to one monotone coordinate transformation $y:\mathbb{R} \mapsto \mathbb{R}$.
+
+\begin{equation}
+    {\psi^\bullet}'(x) = 
+    \left ( \frac{1}{\sqrt{y'(x)}} \right )' \phi(y(x))
+    +
+    \frac{1}{\sqrt{y'(x)}} \phi'(y(x)) y'(x)
+    =
+    \left ( \frac{1}{\sqrt{y'(x)}} \right )' \phi(y(x))
+    +
+    \sqrt{y'(x)} \phi'(y(x))
+\end{equation}
+
+\begin{equation}
+    {\psi^\bullet}''(x) = 
+    \left ( \frac{1}{\sqrt{y'(x)}} \right )'' \phi(y(x))
+    +
+    \left ( \frac{1}{\sqrt{y'(x)}} \right )' \phi'(y(x)) y'(x)
+    +
+    \left ( \sqrt{y'(x)} \right )' \phi'(y(x))
+    +
+    \sqrt{y'(x)} \phi''(y(x)) y'(x)
+\end{equation}
+
+Direct calculation shows that:
+
+\begin{equation}
+    \left ( \frac{1}{\sqrt{y'(x)}} \right )'y'(x)
+    +
+    \left ( \sqrt{y'(x)} \right )' 
+    =
+    0
+\end{equation}
+
+Therefore
+
+\begin{equation}
+    {\psi^\bullet}''(x) = 
+    \left ( \frac{1}{\sqrt{y'(x)}} \right )'' \phi(y(x))
+    +
+    \sqrt{y'(x)} y'(x) \phi''(y(x))
+\end{equation}
+
+And
+
+\begin{equation}
+    \frac{{\psi^\bullet}''(x)}{\psi^\bullet(x)} = 
+    \frac{\left ( \frac{1}{\sqrt{y'(x)}} \right )''}{\frac{1}{\sqrt{y'(x)}}}
+    +
+    (y'(x))^2 \frac{\phi''(y(x))}{\phi(y(x))}
+\end{equation}
+
+\begin{equation}
+    \frac{\left ( \frac{1}{\sqrt{y'(x)}} \right )''}{\frac{1}{\sqrt{y'(x)}}}
+    =
+    -2 (\mathcal{S} y)(x)
+\end{equation}
+
+Where $\mathcal{S}f$ is the Schwarzian derivative:
+
+\begin{equation}
+    (\mathcal{S} f)(x) = \frac{f'''(x)}{f'(x)} - \frac{3}{2} \left ( \frac{f''(x)}{f'(x)}\right )^2
+\end{equation}
+
+Therefore
+
+\begin{equation}
+    -\frac{1}{2}
+    \frac{{\psi^\bullet}''(x)}{\psi^\bullet(x)}
+    +
+    V(x)-E
+    =
+    -(y'(x))^2 (V_0(y(x)) - E_0)
+    +
+    V(x)
+    -
+    E
+    +
+    (\mathcal{S} y)(x)
+\end{equation}
+
+Now we can try to find an approprate ``gauge transformation'' $y(x)$ that would make the term 
+
+\begin{equation}
+    -(y'(x))^2 (V_0(y(x)) - E_0)
+    +
+    V(x)
+    -
+    E
+    =
+    0
+\end{equation}
+
+zero.
+
+Rearranging the terms:
+
+\begin{equation}
+    y'(x)
+    =
+    \frac{\sqrt{V(x)-E}}{\sqrt{V_0(y(x))-E_0}}
+    =
+    \frac{\sqrt{E-V(x)}}{\sqrt{E_0-V_0(y(x))}}
+\end{equation}
+
+\begin{equation}
+    \sqrt{V_0(y)-E_0} \ dy
+    =
+    \sqrt{V(x)-E} \ dx
+\end{equation}
+
+With setting $y_0=y(x_0)$
+
+\begin{equation}
+    \int_{y_0}^y\sqrt{V_0(\eta)-E_0} \ d\eta
+    =
+    \int_{x_0}^x\sqrt{V(\xi)-E} \ d\xi
+\end{equation}
+
+
+Now lets assume that we can calculate the following action integrals:
+
+\begin{equation}
+    S(x,E)=\int_{x_0}^x \sqrt{E-V(\xi)} d\xi
+\end{equation}
+
+\begin{equation}
+    S_0(y,E_0)=\int_{y_0}^y\sqrt{V_0(\eta)-E_0} \ d\eta
+\end{equation}
+
+Then
+
+\begin{equation}
+    S_0(y,E_0) = S(x,E)
+\end{equation}
+
+\begin{equation}
+    y(x) = S_0^{(-1)}(S(x,E),E_0)
+\end{equation}
+
+Because by using the derivative of an inverse, and the chain rule, we get:
+
+\begin{equation}
+    y'(x) = \frac{1}{S_0'(y(x),E_0)} S'(x,E)
+\end{equation}
+
+It is worth mentioning three cases where this approach is applicable
+
+\subsubsection{WKB approximation}
+
+We formally get beck Wentzel–Kramers–Brillouin approximation if we use the constant $V_0=0$ trivial potential as a reference system:
+
+\begin{equation}
+    S_0(x,E_0) = x \sqrt{E_0}
+\end{equation}
+
+\begin{equation}
+    \phi(x) = A e^{i \sqrt{E_0} x}
+\end{equation}
+
+\begin{equation}
+    y(x) = \frac{1}{\sqrt{E_0}} \int_0^x \sqrt{E-V(x)} dx 
+\end{equation}
+
+\begin{equation}
+    \psi^\bullet(x) = \frac{E_0^{1/4}}{(E-V(x))^{1/4}} A e^{i S(x,E) / \sqrt{E_0}}
+\end{equation}
+
+For instance if we have a periodic potencial on a compactified circle $S^1$, then this formula could be used to approximate left and right moving eigenstates.
+
+
+\subsubsection{Airy approximation}
+
+$V_0=c x$
+
+\subsubsection{Hermite approximation}
+
+Predominantly for potentials with bound states.
 
 \subsection{Concavity properties}
 
@@ -1849,6 +2825,205 @@ Now if we are interested in the complex value of $a_{jk}$ in a gauge where all $
 \end{equation}
 
 For the absolute value squares of matrix elements we derived exact upper and lower bounds in the previous section, therefore if we know greater then $0$ lower bounds for $|a_{sj}|^2$ and $|a_{ks}|^2$, then we have exact upper and lower bounds for the real and imaginary parts of $a_{jk}$.
+
+\section{Quantum Mechanical Bootstrap}
+Quantum mechanical bootstrap, first introduced in \cite{PhysRevLett.125.041601}, is a framework for obtaining exact solutions to quantum mechanical systems by imposing consistency conditions that constrain the space of allowed solutions. While the original work focused on the quantum mechanics of large-N matrix models, subsequent developments have demonstrated that these techniques can be extended to derive non-perturbative results for more familiar one-dimensional systems, such as the anharmonic oscillator \cite{Berenstein:2021dyf}.
+\\
+\\
+In this work, we first construct the bootstrap method and then apply it to the simple harmonic oscillator as a benchmark to demonstrate its accuracy, before extending the analysis to more complex systems that are typically accessible only through perturbative approaches.
+\subsection{The Operator Spectrum as a Moment Problem}\label{momentprob}
+In Quantum Mechanics, we are usually interested in calculating the expectation values of operators. Expectation values are usually the only "measurable" quantities of a theory.  \\
+\\
+We define the expectation value of an operator $\mathcal{O}$ as
+\begin{equation}\label{expval}
+    \langle \mathcal{O} \rangle
+    =
+    \bra{\psi}\mathcal{O}\ket{\psi}.
+\end{equation}
+
+Considering the resolution of the identity,
+\begin{equation}\label{identity}
+    \mathbb{1} =\int_{-\infty}^{+\infty} dx\,\ket{x}\bra{x},
+\end{equation}
+and inserting Eq.~\eqref{identity} on either side of $\mathcal{O}$ in Eq.~\eqref{expval}, we obtain
+\begin{equation}
+    \langle \mathcal{O} \rangle
+    =
+    \int_{-\infty}^{+\infty}\int_{-\infty}^{+\infty} dx\,dy\,
+    \langle \psi | x \rangle
+    \langle x | \mathcal{O} | y \rangle
+    \langle y | \psi \rangle.
+\end{equation}
+Taking, 
+\begin{equation*}
+    \mathcal{O} = f(\hat{x})
+\end{equation*}
+We get,
+\begin{equation*}
+    \bra{x}\mathcal{O}\ket{y} = f(x)\delta(x-y)
+\end{equation*}
+Thus, Eq.~\eqref{expval} can be formulated as 
+\begin{equation}
+    \langle \mathcal{O} \rangle
+    =\int_{-\infty}^{+\infty} dx \psi^{*}(x)f(x)\psi(x)
+\end{equation}
+Or,
+\begin{equation}\label{expvalIntg}
+    \langle \mathcal{O} \rangle
+    =\int_{-\infty}^{+\infty} dx f(x)|\psi(x)|^{2}
+\end{equation}
+
+Consider the following case,
+\begin{equation}\label{casePolym}
+    f(x) = x^{n}
+\end{equation}
+It's easy to see that Eq.~\eqref{expvalIntg} can be written as, 
+    \begin{equation}\label{Hambg1}
+  s_{n} = \langle {x^n} \rangle
+    =\int_{-\infty}^{+\infty}  x^{n} d\mu
+\end{equation}
+Where, 
+\begin{equation}\label{Moment1}
+   d\mu = |\psi(x)|^{2} dx
+\end{equation}
+We refer to $\mu$ as the measure and to Eq.~\eqref{Hambg1} as the "Hamburger Moment Problem" (citation needed).\\
+\\
+Integrating both sides of Eq.\eqref{Moment1}, it is obvious to see that 
+\begin{equation}\label{Moment2}
+   \mu = \int_{-\infty}^{\infty} |\psi(x)|^{2} dx = 1
+\end{equation}
+Thus, the measure is a "positive measure" and the L.H.S of Eq.~\eqref{Hambg1} is a sequence of positive moments. In other words, Eq.~\eqref{Hambg1} is solvable if the Hankle matrix defined by, 
+\begin{equation*}
+    M_{ij} = s_{i+j} 
+\end{equation*}
+is Positive Semidefinite $M \preceq 0$. Where, $0 \leq i,j \leq N$\\
+\\
+
+\subsection{Construction of the Quantum Mechanical Bootstrap}
+In the language of \ref{momentprob}, solving a quantum mechanical problem can be described as finding a unique positive measure such that the moment sequence converges for any set of Operators \cite{nohutçu_2024}. \\
+\\ 
+We start by closely following the construction described in \cite{Berenstein:2021dyf}. \\
+\\
+Consider the Time Independent Schrodinger equation, 
+\begin{equation}
+     \hat{H} \ket{\psi} = E\ket{\psi} 
+\end{equation}
+Where,
+\begin{equation*}
+    \hat{H} =  -\frac{1}{2m} \hat{p}^{2} + V(\hat{x})  
+\end{equation*}
+
+For any operator $\mathcal{O}$, we have the following relation in a energy Eigenstate,
+\begin{equation}\label{QMBoot1}
+\langle [H,\mathcal{O}] \rangle = 0
+\end{equation}
+
+Thus we have, 
+
+\begin{equation}\label{QMBoot2}
+\langle H\mathcal{O} \rangle = E\langle \mathcal{O} \rangle
+\end{equation}
+\\
+\\
+From, equations \eqref{QMBoot1} and \eqref{QMBoot2}, it is clear that we can construct a closed set of equations that tightly constrain the allowed values that the energy can take. We can arrive at a simple but rich set of equations by choosing an appropriate set of operators. \\
+\\
+For polynomial potentials this choice was presented in \cite{Berenstein:2021dyf}. \\
+\\
+We consider the following set of operators, 
+\begin{equation*}
+    \mathcal{O}_{1} = x^{n}p
+\end{equation*}
+\begin{equation*}
+    \mathcal{O}_{2} = x^{n-1}
+\end{equation*}
+From, 
+\begin{equation}
+    \langle [H,\mathcal{O}_{1}] \rangle = -\frac{1}{2m}[\hat{p}^{2},x^{n}p] + [V(\hat{x}),x^{n}p]
+\end{equation}
+Using the relation
+\begin{equation}
+    [A,BC] = [A,B]C + B[A,C] 
+\end{equation}
+We rewrite 
+\begin{equation}
+    \langle [H,\mathcal{O}_{1}] \rangle = -\frac{1}{2m}[\hat{p}^{2},x^{n}]p + x^{n}[V(\hat{r}),p]
+\end{equation}
+Taking, 
+
+\begin{equation}
+    \hat{p} = -i \frac{\partial}{\partial x}
+\end{equation}
+and,
+\begin{equation}
+   [\hat{x},\hat{p}] = i
+\end{equation}
+We get, 
+\begin{equation}
+   [V(\hat{x}),\hat{p}] = iV'(x)
+\end{equation}
+and
+\begin{equation}
+   [\hat{x}^{n},\hat{p}] = i n x^{n-1} 
+\end{equation}
+
+\begin{equation}
+ [\hat{p}^{2},x^{n}] = \hat{p} [\hat{p},\hat{x}^{n}] + [\hat{p},\hat{x}^{n}]\hat{p} = (- i n x^{n-1} )\hat{p} + \hat{p}(-i n x^{n-1} )
+\end{equation}
+Which results in,
+\begin{equation}
+\hat{p} [\hat{p},\hat{x}^{n}] + [\hat{p},\hat{x}^{n}]\hat{p} = - 2i n x^{n-1}\hat{p} - n(n-1) x^{n-2} 
+\end{equation}
+Thus, 
+\begin{equation}
+ [\hat{p}^{2},x^{n}]= - 2i n x^{n-1}\hat{p}^{2} - n(n-1) x^{n-2}\hat{p} 
+\end{equation}
+Which gives us, 
+\begin{equation}
+     \langle [H,\mathcal{O}_{1}] \rangle = -\frac{in}{m}\langle x^{n-1}\hat{p}^{2}\rangle- \frac{n(n-1)}{2m} \langle x^{n-2}\hat{p}\rangle + i\langle x^{n}V'(x)\rangle
+\end{equation}
+Thus, 
+\begin{equation}\label{recurs_prelim}
+     \frac{in}{m}\langle x^{n-1}\hat{p}^{2}\rangle+ \frac{n(n-1)}{2m} \langle x^{n-2}\hat{p}\rangle - i\langle x^{n}V'(x)\rangle = 0
+\end{equation}
+Eq. \eqref{recurs_prelim} enables us to recursively calculate higher moments which make up the Hankle matrix. Eq. \eqref{recurs_prelim} contains a mix of $\langle \hat{x}\rangle$ and $\langle \hat{p}\rangle$. In order to rewrite it purely in terms of $\langle \hat{x}\rangle$ and to involve energy into the mix, we do the following. \\
+\\
+Let's take $\mathcal{O}_{2}$ and insert it into Eq. \eqref{QMBoot2}.\\
+\\
+This gives us, 
+\begin{equation}
+ \frac{-1}{2m} \langle  x^{n-1}\hat{p}^{2} \rangle + \langle V(x)x^{n-1} \rangle= E\langle x^{n-1}\rangle
+\end{equation}
+
+Thus, we find the following relation for  the first term in Eq. \eqref{recurs_prelim}
+\begin{equation}
+ \langle  x^{n-1}\hat{p}^{2} \rangle =2m\langle V(x)x^{n-1} \rangle -2mE\langle x^{n-1}\rangle
+\end{equation}
+Let us now insert $\mathcal{O}_{2}$ into Eq. \eqref{QMBoot1}. 
+
+\begin{equation}
+      \langle [H,\mathcal{O}_{2}] \rangle = \langle -\frac{1}{2m}[\hat{p}^{2},x^{n-1}] + [V(\hat{x}),x^{n-1}]\rangle
+\end{equation}
+We immediately see that, 
+\begin{equation}
+      \langle[\hat{p}^{2},x^{n-1}]\rangle =- 2i (n-1) x^{n-2}\hat{p}^{2} - (n-1)(n-2) x^{n-3}\hat{p} = 0
+\end{equation}
+Which gives us 
+
+\begin{equation}
+        \langle x^{n-2}\hat{p}\rangle = \frac{i}{2}(n-2) \langle x^{n-3}\rangle
+\end{equation}
+Now we can rewrite Eq. \eqref{recurs_prelim} as, 
+
+\begin{equation}
+     -2in\langle V(x)x^{n-1} \rangle +2inE\langle x^{n-1}\rangle- \frac{in(n-1)(n-2)}{4m} \langle x^{n-3}\rangle + i\langle x^{n}V'(x)\rangle = 0
+\end{equation}
+setting $m = 1$ we get,
+\begin{equation}\label{recurs_main}
+     2nE\langle x^{n-1}\rangle+ \frac{n(n-1)(n-2)}{4} \langle x^{n-3}\rangle - \langle x^{n}V'(x)\rangle -2n\langle x^{n-1} V(x) \rangle = 0
+\end{equation}
+\subsection{Simple Harmonic Oscillator}
+\subsection{Anharmonic Oscillator}
+\subsection{Quantum Simple Pendulum}
 
 \section{Combination of the methods}
 
