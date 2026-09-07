@@ -42,8 +42,6 @@ One source of inspiration for this project is the use of formal proof assistants
 >
 > <p align="right"><em>— Terence Tao, Machine-Assisted Proof</em></p>
 
-, Machine-Assisted Proof, Notices of the American Mathematical Society 72(1), 2025.
-
 
 The aim of **Exact Numerics** is to develop an analogous layer of verification for numerical computation.
 
@@ -114,7 +112,7 @@ We are interested in people who would like to join the project by contributing:
 
 - new ideas or rigorous bounding methods,
 - examples from different areas of mathematics, physics, engineering, or numerical analysis,
-- implementations and tests of the methods in computational software such as **Python**, **Mathematica**, or any other reproducible programming language or computational environment,
+- implementations and tests of the methods in computational software such as **Python**, **Mathematica**, or any other open-source or widely available language, in which the computations can be reproduced,
 - comparisons between different certification techniques,
 - numerical experiments illustrating the practical strengths and limitations of the methods.
 
