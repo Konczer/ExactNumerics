@@ -76,6 +76,19 @@ flowchart LR
     E ==>|No| G
     G ==> C
 
+    %% Invisible helper node used only for layout 
+    X["....."] 
+    %% Invisible layout links 
+    
+    G ~~~ X
+    X ~~~ F
+    X ~~~ D
+    X ~~~ X 
+    
+
+    %% Hide helper node 
+    style X fill:transparent,stroke:transparent,color:transparent
+
     classDef normal fill:#f8fafc,stroke:#94a3b8,stroke-width:5.5px,color:#1e293b;
     classDef comp fill:#f5f0fa,stroke:#7e57c2,stroke-width:5px,color:#1e293b;
     classDef cert fill:#eff6ff,stroke:#3b82f6,stroke-width:5px,color:#1e293b;
@@ -88,7 +101,6 @@ flowchart LR
     class F success;
     class G retry;
 ```
-
 
 
 The method used to generate the candidate may be approximate, heuristic, learned, or experimental; the final guarantee should not be.
