@@ -154,7 +154,7 @@
 %Equilibrium predictive inference for Uniform distribution \\
         \large A collection of controlled approximations}
 \author{József Konczer\footnote{\href{mailto:konczer.j@gmail.com}{konczer.j@gmail.com},
-        \href{https://konczer.github.io/}{konczer.github.io}} \ and Rithwik Ranganathan\footnote{*}
+        \href{https://konczer.github.io/}{konczer.github.io}} \ and Rithwik Ranganathan\footnote{\_}
         }
 \date{February 2026}
 
@@ -169,6 +169,25 @@
 
 \section{Introduction}
 
+Numerical calculations and approximative methods are often viewed as non-exact techniques, used only to build intuition or in situations where exact solutions are not available. This project\footnote{The manuscript, examples, and related project material are available at
+\href{https://github.com/Konczer/ExactNumerics}
+{\texttt{github.com/Konczer/ExactNumerics}}}
+aims to challenge this simplistic view. Although approximative methods are not designed to provide exact solutions, they can often be supplemented by rigorous bounds. By the careful application of suitable inequalities, together with some global knowledge about the problem at hand, even a finite computation can provide intervals in which the exact solution is guaranteed to lie.
+
+Therefore, by ``exact numerics'' we mean methods that can provide \emph{exact true statements} about a system after a finite computation. Such statements will often take the form of intervals in which the exact solution, or some quantity of interest, is guaranteed to lie. These exact statements can then be used even in rigorous mathematical proofs. As an example, see the solution of Smale's 14th problem concerning the Lorenz attractor \cite{paper:Tucker2002}.
+
+The methods collected below do not work, and could not work, for arbitrary problems. Some kind of global knowledge about the problem is necessary in order to obtain meaningful finite enclosing intervals. However, we believe that a sufficiently rich family of numerical problems can be identified and matched with suitable methods that provide such exact statements and are relevant for science, mathematics, and engineering.
+
+Further, it seems possible to develop custom-made exact numerical methods for specific problems. Such problems may not be covered by broad families, or may require finer bounds for a more effective development cycle.
+
+In general, in this work we aim to keep computational methods both rigorous and relevant to their intended applications. We try to provide answers that are not only mathematically controlled, but also useful in practice and suitable for further calculations or decision making. A crucial question that a user of a specific numerical method might ask is: ``How close are the results of the approximative method to the exact solution?'' In this paper we collect methods by which this naturally arising question can be answered through statements of the form: ``The result is closer to the exact solution than an exactly calculable value.''
+
+However this work does not wish to undermine uncontrolled numerical methods. Such methods are often very powerful, and many techniques that are now rigorously understood and controlled started as experimental or uncontrolled approaches. While acknowledging the importance of such methods, including techniques developed and used, for instance, by Bender\footnote{See also Carl Bender's lecture series \href{https://www.youtube.com/watch?v=LYNOGk3ZjFM&list=PL43B1963F261E6E47}{Mathematical Physics}.} and others \cite{book:Bender1999}, we want to draw attention to a complementary branch of approximative computation, exact or rigorous numerics.
+
+\subsection{Dialogues On Mathematics}
+
+As a mathematical and cultural reference, consider the following fictional dialogue between Archimedes and Hieron, king of Syracuse:
+
 \begin{quote}
 {\bf Hieron} But are strict proofs in applied mathematics really necessary? After all, as you said, the mathematical model is only an approximation of reality. If you use approximately correct formulae, your results will be still approximately close to reality and they can never be absolutely correct anyway.
 
@@ -179,50 +198,226 @@
   \end{flushright}
 \end{quote}
 
-Methods for \href{https://en.wikipedia.org/wiki/Numerical_certification}{Numerical certification}, with special emphasis on ``posteriori'' certification, where guarantees are not derived using the details of the approximation method, but determined using a proposed approximation and some global properties of the problem in question.
+\subsection{A priori and a posteriori certification} 
 
-\subsection{A few simple demonstrating examples}
+Numerical certification can be roughly divided into two flavours: ``a priori certification'' and ``a posteriori certification''. A typical tool for a priori error control is \href{https://en.wikipedia.org/wiki/Interval_arithmetic}{interval arithmetic}. It has an abundant literature \cite{book:IntervalMoore2009,book:IntervalNeumaier1991,book:IntervalTucker2011}, as well as available libraries in several popular programming languages. Examples include the \href{https://www.boost.org/doc/libs/latest/libs/numeric/interval/doc/interval.htm}{Interval Arithmetic Library} in C++, \href{https://pyinterval.readthedocs.io/en/latest/}{PyInterval} in Python, \href{https://octave.sourceforge.io/interval/}{interval} in GNU Octave, and \href{https://reference.wolfram.com/language/guide/IntervalArithmetic.html}{Interval Arithmetic} in Wolfram Mathematica. 
+Interval arithmetic is also covered by an \href{https://standards.ieee.org/ieee/1788/4431/}{IEEE standard}.
 
-For some, it might be a strange concept to give exact upper and lower bounds for the solution without knowing the precise solution.
-However, it is possible to give such bounds – that are not the tightest possible, but exact and true – based only on an approximate solution, and typically some global property of the problem.
+This work on \href{https://en.wikipedia.org/wiki/Numerical_certification}{numerical certification} focuses mainly on methods of ``a posteriori'' certification. Their main feature is that the guarantees are not derived from the details of the approximation method itself. Instead, they are determined from a proposed approximation together with some global properties of the problem in question.
+
+The scope considered here goes beyond the control of rounding errors and the study of condition numbers. We are interested more broadly in exact bounds and certified statements obtained from structural and global properties of the underlying problem.
+
+The reliance on inequalities leaves considerable room for creativity without losing rigor. Different verification methods may be better or worse suited to different approximative computations. In particular, the certified enclosure obtained by one method may be tighter or looser than that obtained by another. Nevertheless, as long as the assumptions of the verification method are satisfied, each resulting enclosure provides an exact and provably true statement.
+
+\subsection{Broader vision}
+
+Besides improving the image and reputation of numerical calculations as methods capable of producing rigorous mathematical statements, exact numerics may also have a broader role in modern computational pipelines, giving a current relevance to the project.
+
+In particular, exact validation methods -- especially \emph{a posteriori} methods -- can provide an independent test of results obtained by experimental or otherwise uncontrolled computational methods. The method producing a candidate solution could be numerical, heuristic, perturbative, based on machine learning, or even treated as a black box. If the resulting candidate can subsequently be certified against a given specification, then the final result does not have to rely on the internal reliability or ``interpretability'' of the method that produced it.
+
+A related idea has become increasingly important in pure mathematics. Large language models (LLMs) and other automated methods can be used to propose arguments or formal proofs, while proof assistants such as \href{https://lean-lang.org/}{Lean} or \href{https://rocq-prover.org/}{Coq} can independently verify the resulting formal statements. This combination of experimental or generative methods with a rigorous verification layer has been advocated and used, among others, by Terence Tao in machine-assisted mathematics \cite{paper:Tao2025}. The analogous idea considered here is to provide such a verification layer for numerical computation.
+
+The envisioned pipeline can be divided into three main stages: \emph{specification}, \emph{computation}, and \emph{validation}. First, the numerical problem is specified together with the quantities of interest, the available global properties, and the required tolerances. A computational method then produces a candidate solution. Finally, an independent certification method determines whether the candidate satisfies the required specification. If it does, the output is a certified result. If it does not, the candidate can be refined or another computational or validation method can be applied.
+
+
+% In the document:
+\begin{figure}[H]
+    \centering
+
+    \begin{tikzpicture}[
+        node distance=1.1cm and 0.45cm,
+        >=Latex,
+        every node/.style={font=\footnotesize, align=center},
+        normal/.style={
+            draw=gray!65,
+            line width=1.0pt,
+            rounded corners=3pt,
+            fill=gray!6,
+            minimum height=1.0cm,
+            text width=1.8cm
+        },
+        computation/.style={
+            draw=violet!65!black,
+            line width=1.2pt,
+            rounded corners=3pt,
+            fill=violet!6,
+            minimum height=1.0cm,
+            text width=1.9cm
+        },
+        certification/.style={
+            draw=blue!65!black,
+            line width=1.2pt,
+            rounded corners=3pt,
+            fill=blue!5,
+            minimum height=1.0cm,
+            text width=1.7cm
+        },
+        success/.style={
+            draw=green!55!black,
+            line width=1.2pt,
+            rounded corners=3pt,
+            fill=green!5,
+            minimum height=1.0cm,
+            text width=1.6cm
+        },
+        retry/.style={
+            draw=orange!75!black,
+            line width=1.0pt,
+            rounded corners=3pt,
+            fill=orange!7,
+            minimum height=0.9cm,
+            text width=1.6cm
+        },
+        decision/.style={
+            diamond,
+            aspect=2,
+            draw=blue!65!black,
+            line width=1.2pt,
+            fill=blue!5,
+            inner sep=1pt,
+            text width=1.25cm
+        },
+        flow/.style={->, line width=1.1pt},
+        feedback/.style={->, line width=0.9pt, dashed}
+    ]
+
+    % Main nodes
+    \node[normal] (problem)
+        {Numerical problem\\+ global properties};
+
+    \node[normal, right=of problem] (spec)
+        {Quantities of interest\\+ tolerances};
+
+    \node[computation, right=of spec] (candidate)
+        {Candidate solution:\\numerical / AI/ML / heuristic / experimental};
+
+    \node[certification, right=of candidate] (cert)
+        {Rigorous\\certification};
+
+    \node[decision, right=of cert] (test)
+        {Within\\tolerance?};
+
+    \node[success, right=of test] (result)
+        {Certified result};
+
+    \node[retry, below=1.0cm of test] (refine)
+        {Refine candidate};
+
+    % Main flow
+    \draw[flow] (problem) -- (spec);
+    \draw[flow] (spec) -- (candidate);
+    \draw[flow] (candidate) -- (cert);
+    \draw[flow] (cert) -- (test);
+    \draw[flow] (test) -- node[above]{Yes} (result);
+    \draw[flow] (test) -- node[right]{No} (refine);
+
+    % Feedback loop
+    \draw[feedback] (refine.west) -| (candidate.south);
+
+    % Stage grouping
+    \node[
+        draw=gray!45,
+        dashed,
+        rounded corners=4pt,
+        inner sep=5pt,
+        fit=(problem)(spec),
+        label={[font=\scriptsize\bfseries]above:Specification}
+    ] {};
+
+    \node[above=0.10cm of candidate, font=\scriptsize\bfseries]
+        {Computation};
+
+    \node[above=0.10cm of cert, font=\scriptsize\bfseries]
+        {Validation};
+
+    \end{tikzpicture}
+
+    \caption{A proposed computational pipeline for exact numerics. The candidate
+    solution may be produced by an approximate, heuristic, or experimental
+    method. An independent certification stage determines whether the quantities
+    of interest satisfy the required tolerances.}
+    \label{fig:exact-numerics-pipeline}
+\end{figure}
+
+One could ask: if the method used to generate the candidate is largely irrelevant to the final guarantee, why not simply guess randomly until a candidate passes the validation test? The reason for retaining sophisticated, and potentially expensive, approximative solvers is that verification may itself be difficult to achieve. A good approximative method can produce candidates that are much more likely to admit tight and successful certification. Moreover, even when verification requires computational effort comparable to that of generating the approximate solution, in many applications this additional cost may be justified by the certainty provided by the final certification.
+
+Such a synergy between computation and validation is particularly useful when the computational method is difficult to analyse directly. A powerful but uncontrolled method can be used to search for a good candidate, while the final guarantee is supplied independently. In this way, experimental methods can be made reliable and AI related results can be cured from hallucinations.
+Systematic errors only slow down the process, but can't spoil the final certified result.
+Therefore the output becomes suitable for use in subsequent calculations, mathematical arguments, or decision making.
+
+
+
+\subsection{A few simple illustrative examples}
+
+For some, it might still be a strange concept to give exact upper and lower bounds for a solution without knowing the precise solution. However, it is possible to give such bounds -- which are not necessarily the tightest possible, but nevertheless provide exact and true statements -- based only on an approximate solution and, typically, some global property of the problem. 
 
 \subsubsection{A simple root guessing problem}
 
-To demonstrate a basic exact bound reasoning in the context of root finding, consider the following function and root finding problem:
+To demonstrate a basic exact-bound reasoning in the context of root finding, consider the following function and root-finding problem\footnote{Example (ix) in \cite{book:IntervalNeumaier1991}.}: 
+
+\begin{equation} 
+f(x) = x + \tanh(x), \qquad f(x) = 1. 
+\end{equation} 
+
+Let $x^*$ denote the exact solution. Let's imagine that we got a hint that the root is close to $x^\bullet=0.5$. Is there a way to say something exact about the accuracy of the guess without calculating the root? The answer is affirmative, because we can deduce a global property of the function $f$. 
+It is easy to see that 
 
 \begin{equation}
-    f(x) = x + \tanh(x), \quad f(x) = 1
-\end{equation}
+f'(x) = 1 + \operatorname{sech}^2(x) \in (1,2]. 
+\end{equation} 
 
-Let's imagine that we got a hint that the root is close to $x^\bullet=0.5$. Is there a way to say something exact about the accuracy of the guess without calculating the root?
-The answer is affirmative, because we can deduce a global property of the $f(.)$ function. It is easy to see that its derivative is in the range $f’(x) \in (1,2]$. Therefore, we can do the following exact statement referring to the mean value theorem \cite{book:Rudin}:
-
-\begin{equation}
-    f(x^*)-f(x^\bullet) = f'(\xi) \cdot (x^*-x^\bullet)
-    , \quad \xi \in [x^\bullet, x^*] \subseteq \mathbb{R}
-\end{equation}
-
-After taking the absolute value of both sides, we can state the following inequality:
+Therefore, using the mean value theorem \cite{book:Rudin}, we can make the following exact statement:
 
 \begin{equation}
-    |f(x^*)-f(x^\bullet)| = |f'(\xi)| \cdot |x^*-x^\bullet| 
-    \ge
-    \inf_{\xi \in \mathbb{R}} |f'(\xi)| \cdot |x^*-x^\bullet| 
-\end{equation}
+f(x^*)-f(x^\bullet) = f'(\xi)\,(x^*-x^\bullet), 
+\end{equation} 
 
-And while $\inf_{\xi \in \mathbb{R}} |f'(\xi)| = 1$ for this particular function, we get following exact bound:
-
-\begin{equation}
-    |x^*-x^\bullet| \le \frac{|f(x^*)-f(x^\bullet)|}{\inf_{\xi \in \mathbb{R}} |f'(\xi)|}
-    = | 1 - f(x^\bullet) | = | 1 - (0.5 + \tanh(0.5))| \le 0.037883 
-\end{equation}
-
-Therefore with this educated (or lucky) guess we can exactly state that:
+where $\xi$ lies between $x^\bullet$ and $x^*$. 
+After taking the absolute value of both sides, we can state the following inequality: 
 
 \begin{equation}
-    x^* \in [0.462117, 0.537883], \quad \text{or} \quad 
-    x^* = 0.5 \pm 0.037883 
+|f(x^*)-f(x^\bullet)| 
+=
+|f'(\xi)|\,|x^*-x^\bullet| 
+\ge
+\inf_{\xi \in \mathbb{R}} |f'(\xi)|\,|x^*-x^\bullet|. 
+\end{equation} 
+
+Since $\inf_{\xi \in \mathbb{R}} |f'(\xi)| = 1$ for this particular function, we obtain the following exact bound:
+
+\begin{equation}
+|x^*-x^\bullet| 
+\le
+\frac{|f(x^*)-f(x^\bullet)|} {\inf_{\xi \in \mathbb{R}} |f'(\xi)|} 
+= 
+|1-f(x^\bullet)| = |1-(0.5+\tanh(0.5))| 
+\le 0.037883. 
 \end{equation}
+
+Therefore, with this educated (or lucky) guess, we can exactly state that 
+
+\begin{equation}
+x^* \in [0.462117,\,0.537883], \qquad \text{or equivalently} \qquad x^* = 0.5 \pm 0.037883. 
+\end{equation}
+
+\begin{figure}[H] 
+\centering 
+\begin{subfigure}[t]{0.4\textwidth} 
+\centering 
+\includegraphics[width=\linewidth]{img/tanh01.png} 
+\caption{Certified interval for $x^*$, $f(x^*)=1$, based on the approximate guess $x^\bullet=0.5$.}
+\label{fig:tanh01} 
+\end{subfigure} 
+\hfill 
+\begin{subfigure}[t]{0.48\textwidth} 
+\centering 
+\includegraphics[width=\linewidth]{img/tanh02.png}
+\caption{Closer view, showing the excluded region based on a global lower bound of the derivative of $f(x)$ (specifically $|f'(x)|\ge1$)} 
+\label{fig:tanh02} 
+\end{subfigure} 
+\caption{Illustration of a simple ``a posteriori'' solution-certification example for $f(x)=x+\tanh(x)$. A good approximate guess $x^\bullet=0.5$, together with a global lower bound on $|f'(x)|$, gives a certified interval containing the exact solution $x^*$ for the equation $f(x^*)=1$.} 
+\label{fig:tanh-root-certification} 
+\end{figure}
 
 \subsubsection{Newtons method with exact bounds}
 
