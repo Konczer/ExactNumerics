@@ -156,7 +156,7 @@
 %Equilibrium predictive inference for Uniform distribution \\
         \large A collection of controlled approximations}
 \author{József Konczer\footnote{\href{mailto:konczer.j@gmail.com}{konczer.j@gmail.com},
-        \href{https://konczer.github.io/}{konczer.github.io}} \ and Rithwik Ranganathan\footnote{\_}
+        \href{https://konczer.github.io/}{konczer.github.io}} \ and Rithwik Ranganathan\footnote{\href{mailto:rithwik.ranganathan@gmail.com}{rithwik.ranganathan@gmail.com}, \href{https://github.com/Sudo-RR} {github.com/Sudo-RR}}
         }
 \date{February 2026}
 
@@ -351,7 +351,7 @@ Therefore the output becomes suitable for use in subsequent calculations, mathem
 
 \subsubsection{Certificates and validation protocols}
 
-To certify a numerical result, the validator usually needs more information than only the value of the quantity of interest. The computational method can therefore be asked to return, together with its proposed answer, additional data that serves as a \emph{certificate} or \emph{witness} for the validation procedure.
+To certify a numerical result, the validator usually needs more information than only the value of the quantity of interest. The computational method can therefore be asked to return, together with its proposed answer, additional data that serves as a \emph{certificate} or \emph{witness} \cite{paper:McConnell2011} for the validation procedure.
 
 For example, an approximate eigenvalue by itself may not contain enough information for a useful certification. A Krylov--Weinstein bound can instead use an approximate eigenvector together with the corresponding approximate eigenvalue to obtain a rigorous eigenvalue enclosure. Similarly, in a matrix diagonalisation problem one may ask the computational method to return the proposed basis vectors, or the corresponding change of basis, and then analyse the transformed matrix using Gershgorin-type bounds.
 
@@ -2709,7 +2709,7 @@ bounds rather than ordinary finite-basis Rayleigh--Ritz upper bounds.
 
 \subsection{Local energy methods}
 
-Local energy methods are most naturally defined in the coordinate representation.
+Local energy methods are most naturally defined in the coordinate representation \cite{paper:GibaraHall2019,paper:Mouchet2005,book:Thirring1990}.
 
 Lets take a standard time-independent Schrödinger equation:
 
@@ -3050,6 +3050,8 @@ Predominantly for potentials with bound states.
 
 \subsection{Concavity properties}
 
+See \cite{paper:Gartner2010}.
+
 Lemma
 
 For any function $f: X \times X \mapsto \mathbb{R}$
@@ -3091,6 +3093,335 @@ Proof
 \end{equation}
 
 The sum of the smallest eigenvalues is concave (because of the trace).
+
+\subsection{Mixture of Hamiltonians}
+
+For any parameter dependent family of Hamiltonians $H_\lambda$ and any positive normalized measure $\mu \in \mathfrak{M}_+^1(\Lambda)$:
+
+\begin{equation}
+    H=\int_\Lambda H_\lambda d\mu(\lambda)
+    \implies
+    E_0(H) \ge \int_\Lambda E_0(H_\lambda) d\mu(\lambda)
+\end{equation}
+
+For example take the quartic oscillator with shifted potential ($X_0\in\mathbb{R}$ is a constant):
+
+\begin{equation}
+    H=P^2 + X^4-X_0^4
+\end{equation}
+
+A special choice is a Dirac delta potential:
+
+\begin{equation}
+    H_\lambda=P^2+v(\lambda) \ \delta(x-\lambda)
+\end{equation}
+
+\begin{equation}
+    H_{T} = P^2 + \min(V(X),0)
+    =
+    \int_{-X_0}^{X_0} H_\lambda \frac{1}{2 X_0} d\lambda
+\end{equation}
+
+If we choose $v(\lambda)$ to be:
+
+\begin{equation}
+    v(\lambda) = 2 X_0 V(\lambda)
+\end{equation}
+
+Then
+
+\begin{equation}
+    H_{\lambda}
+    =
+    P^2
+    +
+    2X_0 V(\lambda)\,\delta(x-\lambda)
+\end{equation}
+
+and therefore
+
+\begin{align}
+    \int_{-X_0}^{X_0}
+    H_{\lambda}\frac{1}{2X_0}\,d\lambda
+    &=
+    P^2
+    +
+    \int_{-X_0}^{X_0}
+    V(\lambda)\,\delta(x-\lambda)\,d\lambda
+    \\
+    &=
+    P^2
+    +
+    V(x)\,\mathbf{1}_{[-X_0,X_0]}(x)
+    \\
+    &=
+    P^2
+    +
+    \left(x^4-X_0^4\right)
+    \mathbf{1}_{[-X_0,X_0]}(x).
+\end{align}
+
+For an attractive Dirac delta potential
+
+\begin{equation}
+    P^2+v\,\delta(x-\lambda),
+    \qquad v<0,
+\end{equation}
+
+the ground-state energy is
+
+\begin{equation}
+    E_0
+    =
+    -\frac{v^2}{4}.
+\end{equation}
+
+Since $V(\lambda)\leq 0$ for $\lambda\in[-X_0,X_0]$, we obtain
+
+\begin{align}
+    E_0(H_\lambda)
+    &=
+    -\frac{v(\lambda)^2}{4}
+    \\
+    &=
+    -X_0^2 V(\lambda)^2
+    \\
+    &=
+    -X_0^2
+    \left(\lambda^4-X_0^4\right)^2.
+\end{align}
+
+Using the concavity of the ground-state energy,
+
+\begin{align}
+    E_0(H_T)
+    &\geq
+    \int_{-X_0}^{X_0}
+    E_0(H_\lambda)
+    \frac{1}{2X_0}\,d\lambda
+    \\
+    &=
+    -\frac{X_0}{2}
+    \int_{-X_0}^{X_0}
+    \left(\lambda^4-X_0^4\right)^2
+    d\lambda.
+\end{align}
+
+By symmetry,
+
+\begin{align}
+    \int_{-X_0}^{X_0}
+    \left(\lambda^4-X_0^4\right)^2
+    d\lambda
+    &=
+    2
+    \int_0^{X_0}
+    \left(
+        \lambda^8
+        -2X_0^4\lambda^4
+        +X_0^8
+    \right)d\lambda
+    \\
+    &=
+    2
+    \left[
+        \frac{\lambda^9}{9}
+        -
+        \frac{2X_0^4\lambda^5}{5}
+        +
+        X_0^8\lambda
+    \right]_0^{X_0}
+    \\
+    &=
+    2X_0^9
+    \left(
+        \frac{1}{9}
+        -
+        \frac{2}{5}
+        +
+        1
+    \right)
+    \\
+    &=
+    \frac{64}{45}X_0^9.
+\end{align}
+
+Hence
+
+\begin{equation}
+    \boxed{
+        E_0(H_T)
+        \geq
+        -\frac{32}{45}X_0^{10}
+    }.
+\end{equation}
+
+Recall that
+
+\begin{equation}
+    H_{\mathrm{Quart}}
+    =
+    P^2+X^4
+    =
+    H+X_0^4.
+\end{equation}
+
+Moreover, since
+
+\begin{equation}
+    H
+    =
+    P^2+V(X)
+\end{equation}
+
+and
+
+\begin{equation}
+    H_T
+    =
+    P^2+\min\{V(X),0\},
+\end{equation}
+
+we have the operator inequality
+
+\begin{equation}
+    H \geq H_T.
+\end{equation}
+
+Consequently,
+
+\begin{equation}
+    E_0(H)
+    \geq
+    E_0(H_T)
+    \geq
+    -\frac{32}{45}X_0^{10}.
+\end{equation}
+
+Using
+
+\begin{equation}
+    E_0(H_{\mathrm{Quart}})
+    =
+    E_0(H)+X_0^4,
+\end{equation}
+
+we therefore obtain the family of lower bounds
+
+\begin{equation}
+    \boxed{
+        E_0(H_{\mathrm{Quart}})
+        \geq
+        X_0^4-\frac{32}{45}X_0^{10}
+    }.
+\end{equation}
+
+We can now optimize over $X_0>0$. Define
+
+\begin{equation}
+    f(X_0)
+    =
+    X_0^4-\frac{32}{45}X_0^{10}.
+\end{equation}
+
+Then
+
+\begin{align}
+    f'(X_0)
+    &=
+    4X_0^3
+    -
+    \frac{320}{45}X_0^9
+    \\
+    &=
+    4X_0^3
+    -
+    \frac{64}{9}X_0^9.
+\end{align}
+
+For $X_0>0$, the stationary point satisfies
+
+\begin{equation}
+    4
+    =
+    \frac{64}{9}X_0^6,
+\end{equation}
+
+and hence
+
+\begin{equation}
+    X_0^6
+    =
+    \frac{9}{16}.
+\end{equation}
+
+Therefore
+
+\begin{equation}
+    \boxed{
+        X_0^{\star}
+        =
+        \left(\frac{9}{16}\right)^{1/6}
+        =
+        \left(\frac{3}{4}\right)^{1/3}
+    }.
+\end{equation}
+
+At this point,
+
+\begin{align}
+    f(X_0^\star)
+    &=
+    (X_0^\star)^4
+    -
+    \frac{32}{45}(X_0^\star)^{10}
+    \\
+    &=
+    (X_0^\star)^4
+    \left(
+        1-\frac{32}{45}(X_0^\star)^6
+    \right)
+    \\
+    &=
+    (X_0^\star)^4
+    \left(
+        1-\frac{32}{45}\frac{9}{16}
+    \right)
+    \\
+    &=
+    \frac{3}{5}(X_0^\star)^4.
+\end{align}
+
+Thus
+
+\begin{equation}
+    \boxed{
+        E_0(H_{\mathrm{Quart}})
+        \geq
+        \frac{3}{5}
+        \left(\frac{3}{4}\right)^{4/3}
+    }.
+\end{equation}
+
+Numerically,
+
+\begin{equation}
+    X_0^\star
+    \simeq
+    0.90856,
+\end{equation}
+
+and the optimized lower bound is
+
+\begin{equation}
+    \boxed{
+        E_0(H_{\mathrm{Quart}})
+        \gtrsim
+        0.40885
+    }.
+\end{equation}
+
+Although this is a modest lower estimate, one can add more Dirac delta functions to improve the bound \cite{book:Albeverio2005}.
 
 
 \subsection{Semidefinite constrain method}
@@ -3724,12 +4055,12 @@ The assumption that all matrix elements of $A$ are non-zero is stronger than nec
 
 
 \section{Quantum Mechanical Bootstrap}
-Quantum mechanical bootstrap, first introduced in \cite{PhysRevLett.125.041601}, is a framework for obtaining exact solutions to quantum mechanical systems by imposing consistency conditions that constrain the space of allowed solutions. While the original work focused on the quantum mechanics of large-N matrix models, subsequent developments have demonstrated that these techniques can be extended to derive non-perturbative results for more familiar one-dimensional systems, such as the anharmonic oscillator \cite{Berenstein:2021dyf}.
+Quantum mechanical bootstrap, first introduced in \cite{PhysRevLett.125.041601}, is a framework for obtaining exact solutions to quantum mechanical systems by imposing consistency conditions that constrain the space of allowed solutions. While the original work focused on the quantum mechanics of large-N matrix models, subsequent developments have demonstrated that these techniques can be extended to derive non-perturbative results for more familiar one-dimensional systems, such as the anharmonic oscillator \cite{Berenstein:2021dyf} (add citations).
 \\
 \\
-In this work, we first construct the bootstrap method and then apply it to the simple harmonic oscillator as a benchmark to demonstrate its accuracy, before extending the analysis to more complex systems that are typically accessible only through perturbative approaches.
+In this work, we first construct the bootstrap method and then apply it to the simple harmonic oscillator as a benchmark to demonstrate its accuracy, before extending the analysis to more complex systems.
 \subsection{The Operator Spectrum as a Moment Problem}\label{momentprob}
-In Quantum Mechanics, we are usually interested in calculating the expectation values of operators. Expectation values are usually the only "measurable" quantities of a theory.  \\
+In quantum mechanics, we are often interested in the expectation values of operators, since they encode the physical properties of the system and provide one of the main points of contact between the mathematical description of a quantum state and the real world of measurement.\\
 \\
 We define the expectation value of an operator $\mathcal{O}$ as
 \begin{equation}\label{expval}
@@ -3740,7 +4071,7 @@ We define the expectation value of an operator $\mathcal{O}$ as
 
 Considering the resolution of the identity,
 \begin{equation}\label{identity}
-    \mathbb{1} =\int_{-\infty}^{+\infty} dx\,\ket{x}\bra{x},
+    \mathbf{1} =\int_{-\infty}^{+\infty} dx\,\ket{x}\bra{x},
 \end{equation}
 and inserting Eq.~\eqref{identity} on either side of $\mathcal{O}$ in Eq.~\eqref{expval}, we obtain
 \begin{equation}
@@ -3783,16 +4114,16 @@ Where,
 \begin{equation}\label{Moment1}
    d\mu = |\psi(x)|^{2} dx
 \end{equation}
-We refer to $\mu$ as the measure and to Eq.~\eqref{Hambg1} as the "Hamburger Moment Problem" (citation needed).\\
+We refer to $\mu$ as the measure and to Eq.~\eqref{Hambg1} as the "Hamburger Moment Problem" \cite{Shohat1943ThePO}\footnote{for a detailed introduction see \cite{schmüdgen2017themomentproblem} and \cite{schmüdgen2020lecturesmomentproblem}}.\\
 \\
 Integrating both sides of Eq.\eqref{Moment1}, it is obvious to see that 
 \begin{equation}\label{Moment2}
    \mu = \int_{-\infty}^{\infty} |\psi(x)|^{2} dx = 1
 \end{equation}
-Thus, the measure is a "positive measure" and the L.H.S of Eq.~\eqref{Hambg1} is a sequence of positive moments. In other words, Eq.~\eqref{Hambg1} is solvable if the Hankle matrix defined by, 
-\begin{equation*}
+Thus, the measure is a "positive measure" and the L.H.S of Eq.~\eqref{Hambg1} is a sequence of positive moments. In other words, Eq.~\eqref{Hambg1} is solvable if the Hankel matrix \cite{hamburg1} defined by, 
+\begin{equation}\label{hankel}
     M_{ij} = s_{i+j} 
-\end{equation*}
+\end{equation}
 is Positive Semidefinite $M \preceq 0$. Where, $0 \leq i,j \leq N$\\
 \\
 
@@ -3893,7 +4224,7 @@ This gives us,
 
 Thus, we find the following relation for  the first term in Eq. \eqref{recurs_prelim}
 \begin{equation}
- \langle  x^{n-1}\hat{p}^{2} \rangle =2m\langle V(x)x^{n-1} \rangle -2mE\langle x^{n-1}\rangle
+ \langle  x^{n-1}\hat{p}^{2} \rangle =-2m\langle V(x)x^{n-1} \rangle + 2mE\langle x^{n-1}\rangle
 \end{equation}
 Let us now insert $\mathcal{O}_{2}$ into Eq. \eqref{QMBoot1}. 
 
@@ -3911,16 +4242,306 @@ Which gives us
 \end{equation}
 Now we can rewrite Eq. \eqref{recurs_prelim} as, 
 
-\begin{equation}
-     -2in\langle V(x)x^{n-1} \rangle +2inE\langle x^{n-1}\rangle- \frac{in(n-1)(n-2)}{4m} \langle x^{n-3}\rangle + i\langle x^{n}V'(x)\rangle = 0
+\begin{equation}\label{recurs_main}
+     -2n\langle V(x)x^{n-1} \rangle +2nE\langle x^{n-1}\rangle+ \frac{n(n-1)(n-2)}{4m} \langle x^{n-3}\rangle - \langle x^{n}V'(x)\rangle = 0
 \end{equation}
 setting $m = 1$ we get,
-\begin{equation}\label{recurs_main}
+\begin{equation}\label{recurs_main_massless}
      2nE\langle x^{n-1}\rangle+ \frac{n(n-1)(n-2)}{4} \langle x^{n-3}\rangle - \langle x^{n}V'(x)\rangle -2n\langle x^{n-1} V(x) \rangle = 0
 \end{equation}
+
 \subsection{Simple Harmonic Oscillator}
-\subsection{Anharmonic Oscillator}
-\subsection{Quantum Simple Pendulum}
+
+The Hamiltonian of the simple harmonic oscillator is given by
+
+\begin{equation}\label{sho_hamil}
+    \hat{H}
+    =
+    \frac{\hat{p}^{2}}{2m}
+    +
+    \frac{1}{2}m\omega^{2}\hat{x}^{2}.
+\end{equation}
+
+We immediately make the following observation. Consider the third moment of the position operator,
+
+\begin{equation}
+    \langle x^{3}\rangle
+    =
+    \int_{-\infty}^{\infty}
+    x^{3}|\psi_n(x)|^{2}\,dx,
+\end{equation}
+
+where \(\psi_n(x)\) denotes an energy eigenfunction of the harmonic oscillator.
+
+Under the change of variables
+
+\begin{equation*}
+    x\longrightarrow -x,
+\end{equation*}
+
+we obtain
+
+\begin{equation}
+    \langle x^{3}\rangle
+    =
+    \int_{-\infty}^{\infty}
+    (-x)^{3}|\psi_n(-x)|^{2}\,dx.
+\end{equation}
+
+The harmonic oscillator Hamiltonian is invariant under parity. Its energy eigenfunctions therefore have definite parity,
+
+\begin{equation}
+    \psi_n(-x)=(-1)^n\psi_n(x).
+\end{equation}
+
+Consequently,
+
+\begin{equation}
+    |\psi_n(-x)|^{2}
+    =
+    |\psi_n(x)|^{2}.
+\end{equation}
+
+It follows that
+
+\begin{align}
+    \langle x^{3}\rangle
+    &=
+    \int_{-\infty}^{\infty}
+    (-x)^{3}|\psi_n(x)|^{2}\,dx
+    \\
+    &=
+    -\int_{-\infty}^{\infty}
+    x^{3}|\psi_n(x)|^{2}\,dx
+    \\
+    &=
+    -\langle x^{3}\rangle.
+\end{align}
+
+Hence,
+
+\begin{equation}
+    \langle x^{3}\rangle=0.
+\end{equation}
+
+More generally, the same argument applies to every odd moment,
+
+\begin{equation}
+    \boxed{
+    \langle x^{2k+1}\rangle=0,
+    \qquad
+    k\in\mathbb{Z}_{\geq0}.
+    }
+\end{equation}
+Now, we can insert the harmonic oscillator potential into Eq. \eqref{recurs_main}
+
+\begin{equation}\label{harmonic_recurs}
+        -(n+1)m\omega^{2}\langle x^{n+1} \rangle +2nE\langle x^{n-1}\rangle+ \frac{n(n-1)(n-2)}{4m} \langle x^{n-3}\rangle = 0
+\end{equation}
+
+By taking $n = 1$ we get, 
+\begin{equation*}
+    \langle x^{2} \rangle = \frac{E}{m\omega^{2}}
+\end{equation*}
+Where we have used the normalization condition \(\langle 1\rangle=1\). \\
+\\
+We can now construct the Hankel matrix introduced in Eq.~\eqref{hankel} and impose the positive semidefiniteness (PSD) condition,
+\begin{equation}
+M_{2}
+=
+\begin{bmatrix}
+\langle 1\rangle & \langle x\rangle \\
+\langle x\rangle & \langle x^{2}\rangle
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 & 0 \\
+0 & \dfrac{E}{m\omega^{2}}
+\end{bmatrix}.
+\end{equation}
+
+The bootstrap condition requires
+
+\begin{equation}
+M_{2}\succeq 0.
+\end{equation}
+
+Since (m>0) and ($\omega^{2}>0$), this immediately implies
+
+\begin{equation}\label{QMBoot_HO_res1}
+E\geq 0.
+\end{equation}
+This proves that the energy spectrum is bounded from below. This is unsurprising, since the harmonic oscillator potential is itself bounded from below, attaining its minimum at the origin. \\
+\\
+In order to make stronger statements, one needs to consider higher moments. Lets look at the next couple moments, 
+\begin{equation*}
+    \langle x^{4} \rangle = \frac{3}{8 \ m^{2}\omega^{4}} (4 E^{2} + \omega^{2})
+\end{equation*}
+\begin{equation*}
+    \langle x^{6} \rangle = \frac{5 E}{8 \ m^{3}\omega^{6}} (4 E^{2} + 5\omega^{2})
+\end{equation*}
+Which results in the following Hankel matrix, 
+\begin{equation}
+M_{4}
+=
+\begin{bmatrix}
+\langle 1\rangle & \langle x\rangle & \langle x^{2}\rangle & \langle x^{3}\rangle \\
+\langle x\rangle & \langle x^{2}\rangle & \langle x^{3}\rangle & \langle x^{4}\rangle \\
+\langle x^{2}\rangle & \langle x^{3}\rangle & \langle x^{4}\rangle & \langle x^{5}\rangle \\
+\langle x^{3}\rangle & \langle x^{4}\rangle & \langle x^{5}\rangle & \langle x^{6}\rangle
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 & 0 & \dfrac{E}{m\omega^{2}} & 0 \\
+0 & \dfrac{E}{m\omega^{2}} & 0 &
+\dfrac{3}{8m^{2}\omega^{4}}\left(4E^{2}+\omega^{2}\right) \\
+\dfrac{E}{m\omega^{2}} & 0 &
+\dfrac{3}{8m^{2}\omega^{4}}\left(4E^{2}+\omega^{2}\right) & 0 \\
+0 &
+\dfrac{3}{8m^{2}\omega^{4}}\left(4E^{2}+\omega^{2}\right) & 0 &
+\dfrac{5E}{8m^{3}\omega^{6}}\left(4E^{2}+5\omega^{2}\right)
+\end{bmatrix}
+\end{equation}
+
+We can diagonalise this in the following way, consider the "Permutation Matrix" 
+
+\begin{equation}
+P
+=
+\begin{bmatrix}
+ 1 & 0 & 0 & 0 \\
+0 & 0 & 1 & 0 \\
+0 & 1 & 0 & 0 \\
+0 & 0 & 0 & 1
+\end{bmatrix}
+\end{equation}
+
+And consider the following PSD preserving transformation, 
+
+\begin{equation*}
+    M_{4} \longrightarrow P^{T} M_{4} P
+\end{equation*}
+Which transforms $M_{4}$ into, 
+
+\begin{equation}
+M_{4} \longrightarrow 
+\begin{bmatrix}
+1 &  \dfrac{E}{m\omega^{2}} & 0 & 0 \\
+ \dfrac{E}{m\omega^{2}} & \dfrac{3}{8m^{2}\omega^{4}}\left(4E^{2}+\omega^{2}\right) & 0 & 0 \\
+0 & 0 & \dfrac{E}{m\omega^{2}} &
+\dfrac{3}{8m^{2}\omega^{4}}\left(4E^{2}+\omega^{2}\right) \\
+0 & 0 &
+\dfrac{3}{8m^{2}\omega^{4}}\left(4E^{2}+\omega^{2}\right) &
+\dfrac{5E}{8m^{3}\omega^{6}}\left(4E^{2}+5\omega^{2}\right)
+\end{bmatrix}
+\end{equation}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[height = 8 cm, width = 13 cm]{img/HarmonicOscillator_Bootstrap.png}
+    \caption{Bootstrap reconstruction of the harmonic-oscillator spectrum. At finite Hankel depth $K$, each energy level is represented by an allowed interval containing the exact eigenvalue. These intervals progressively narrow as $K$ increases, resolving an increasing number of discrete spectral levels. At $K=250$, 78 levels are individually resolved before the allowed intervals broaden and merge into an unresolved high-energy region.}
+    \label{HO_bootstrap_fig}
+\end{figure}
+
+Now we immediately arrive at the following decomposition, 
+
+\begin{equation}
+M_{4} \longrightarrow 
+\underbrace{
+\begin{bmatrix}
+1 &  \dfrac{E}{m\omega^{2}} \\[2mm]
+\dfrac{E}{m\omega^{2}} &
+\dfrac{3}{8m^{2}\omega^{4}}
+\left(4E^{2}+\omega^{2}\right)
+\end{bmatrix}
+}_{M_{\mathrm{even}}}
+\oplus
+\underbrace{
+\begin{bmatrix}
+\dfrac{E}{m\omega^{2}} &
+\dfrac{3}{8m^{2}\omega^{4}}
+\left(4E^{2}+\omega^{2}\right) \\[2mm]
+\dfrac{3}{8m^{2}\omega^{4}}
+\left(4E^{2}+\omega^{2}\right) &
+\dfrac{5E}{8m^{3}\omega^{6}}
+\left(4E^{2}+5\omega^{2}\right)
+\end{bmatrix}
+}_{M_{\mathrm{odd}}}.
+\end{equation}
+Since both blocks are real symmetric $(2\times2)$ matrices, positive semidefiniteness may be imposed through their principal minors. For the even sector,
+
+\begin{equation}
+\det(M_{\mathrm{even}})
+=
+\frac{4E^{2}+3\omega^{2}}
+{8m^{2}\omega^{4}}
+>0,
+\end{equation}
+
+and therefore this sector introduces no additional restriction on the energy.
+
+For the odd sector,
+
+\begin{equation}
+\det(M_{\mathrm{odd}})
+=
+\frac{
+16E^{4}
++128E^{2}\omega^{2}
+-9\omega^{4}
+}
+{64m^{4}\omega^{8}}.
+\end{equation}
+
+Together with the previously obtained condition $(E\geq0)$, positive semidefiniteness therefore requires
+
+\begin{equation}\label{polym_QMBootHM}
+16E^{4}
++128E^{2}\omega^{2}
+-9\omega^{4}
+\geq 0.
+\end{equation}
+
+Solving Eq.~\eqref{polym_QMBootHM} together with the condition obtained in Eq.~\eqref{QMBoot_HO_res1}, we obtain the following lower bound on the ground-state energy:
+
+\begin{equation}
+    E \geq \frac{\omega}{2}
+    \sqrt{\sqrt{265}-16}.
+\end{equation}
+
+Thus, the bootstrap already establishes that the ground-state energy must be strictly positive. In particular, \(E=0\) is excluded, demonstrating the emergence of a positive vacuum energy from the positivity constraints alone. \\
+By increasing the depth of the Hankel matrix to four, we have therefore already recovered a fundamental property of the harmonic oscillator.
+We now explore how much further these bounds can be tightened by considering higher depths.
+
+From Fig.~\ref{HO_bootstrap_fig}, we see that increasing $K$ produces progressively tighter bounds on the spectrum. In the limit $K\to\infty$, the allowed intervals converge to the exact harmonic-oscillator spectrum.\footnote{See Appendix~\ref{sho_comparison} for a quantitative comparison between the bootstrap spectrum shown in Fig.~\ref{HO_bootstrap_fig} and the exact spectrum.}
+
+\subsection{Operator Basis Dependence}
+
+In the previous subsection, the Hankel matrix was constructed using moments of the position operator. This was a deliberate choice and has proven to be very effective. However, the bootstrap framework allows considerable freedom in the choice of operator basis.
+
+It is therefore natural to ask whether a more appropriate basis can yield tighter spectral resolution at lower truncation depths.
+
+This question was explored for the simple harmonic oscillator in \cite{Aikawa2022}, and more generally in \cite{Aikawa2025}. The authors showed that, with a suitably chosen operator basis, the quantum mechanical bootstrap can reproduce the algebraic structure underlying Dirac's formulation of the harmonic oscillator.
+
+Consider the following operators, 
+\begin{equation*}
+    \hat{a} = \sqrt{\frac{m\omega}{2}} \ (\hat{x} + \frac{i}{m\omega} \ \hat{p} )
+\end{equation*}
+\begin{equation*}
+    \hat{a}^{\dagger} = \sqrt{\frac{m\omega}{2}} \ (\hat{x} - \frac{i}{m\omega} \ \hat{p} )
+\end{equation*}
+
+We can now rewrite the Hamiltonian given in Eq.~\eqref{sho_hamil} in terms of $\hat{a}$ and $\hat{a}^{\dagger}$
+
+This gives us, 
+\begin{equation}\label{sho_ladder}
+    \hat{H} = (\hat{a}^{\dagger}\hat{a} + \frac{1}{2}) \ \omega
+\end{equation}
+
+
+\subsection{Integrability Informed Methods}
+
 
 \section{Combination of the methods}
 
@@ -3960,7 +4581,7 @@ of convergence, it signals an important property of the problem. For a
 counterexample to the argument, consider $H(g)=P^2+gP^4$ on the circle.
 For $g<0$ the operator is unbounded from below; however, all its
 parameter-dependent eigenenergies have convergent perturbative series,
-namely $E_n(g)=n^2+g n^4$.For a more direct application of this idea to the anharmonic oscillator,
+namely $E_n(g)=n^2+g n^4$. For a more direct application of this idea to the anharmonic oscillator,
 see \cite{paper:HallidaySuranyi1980AnharmonicOscillator}.}\cite{paper:Schuetzhold2001Phi4Vacuum,paper:Bender2007NonHermitian}.
 
 Despite these difficulties, we shall show that, by carefully combining
@@ -3972,7 +4593,7 @@ results for this unbounded perturbation problem.
 
 
 
-
+\newpage
 
 \appendix
 
@@ -4063,6 +4684,9 @@ Without introducing the concept of validity maybe only with introducing infinite
         \infty &\text{ otherwise}
     \end{cases}
 \end{equation}
+\section{Comparison: Bootstrap vs Exact Harmonic Oscillator Spectrum}\label{sho_comparison}
+We obtained the following intervals at $K = 250$ 
+
 
 \newpage
 
