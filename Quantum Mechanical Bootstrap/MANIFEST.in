@@ -1,0 +1,2 @@
+include native/bootstrap.cpp
+include native/numeric.cpp
