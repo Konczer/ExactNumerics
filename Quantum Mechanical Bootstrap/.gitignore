@@ -1,0 +1,12 @@
+.build-deps/
+.venv/
+.jupyter-runtime/
+.qmboot-cache/
+build/
+*.egg-info/
+*.pyd
+*.exe
+__pycache__/
+bootstrap_results.csv
+bootstrap_K*.csv
+bootstrap_K*.csv.json
